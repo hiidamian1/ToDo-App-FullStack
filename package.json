@@ -1,0 +1,29 @@
+{
+  "name": "todo-app-fullstack",
+  "version": "1.0.0",
+  "description": "Todo list app, Vue.js, Node.js, Express, Couchbase",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server/index.js",
+    "dev": "nodemon server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiidamian1/ToDo-App-FullStack.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hiidamian1/ToDo-App-FullStack/issues"
+  },
+  "homepage": "https://github.com/hiidamian1/ToDo-App-FullStack#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}
