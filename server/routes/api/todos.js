@@ -8,10 +8,9 @@ const router = express.Router();
 router.get('/', (req, res) => {
 	const bucket = connectCB();
 	console.log("bucket connected");
-	//res.send('Hello');
 
 	const N1qlQuery = couchbase.N1qlQuery;
-	const query = N1qlQuery.fromString("select * from ToDoAppBucket");
+	const query = N1qlQuery.fromString("select meta().id as id, * from ToDoAppBucket");
 
 	bucket.query(query, (err, rows) => {
 		if (err) {
@@ -24,12 +23,10 @@ router.get('/', (req, res) => {
 		}
 	});
 
-	//bucket.disconnect();
-
 });
 
 // Add todos
-router.post('/add', (req, res) => {
+router.post('/', (req, res) => {
 	const bucket = connectCB();
 	console.log("bucket connected");
 
@@ -45,18 +42,15 @@ router.post('/add', (req, res) => {
 			res.json(rows);
 		}
 	})
-	//res.send('Hello');
-	//bucket.disconnect();
 
 });
 
 //Delete todo
-router.delete('/delete/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
 	const bucket = connectCB();
 	console.log("bucket connected delete");
 
 	const id = req.params.id;
-	console.log(typeof(id));
 
 	bucket.remove(id, (err, rows) => {
 		if (err) {
@@ -65,8 +59,6 @@ router.delete('/delete/:id', (req, res) => {
 			res.json(rows);
 		}
 	})
-
-	//bucket.disconnect();
 
 });
 
