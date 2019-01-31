@@ -1,7 +1,11 @@
 <template>
 	<div>
+		<!-- Couchbase JSON response 
 		<div class="todo-item" v-bind:class="{'is-complete': item.ToDoAppBucket.completed}" v-on:click="markComplete">
 			{{item.ToDoAppBucket.title}}
+		</div>-->
+		<div class="todo-item" v-bind:class="{'is-complete': item.completed}" v-on:click="markComplete">
+			{{item.title}}
 		</div>
 		<button class='deleteButton' v-on:click="deleteTodo">Delete</button>
 	</div>
@@ -13,12 +17,16 @@
 		props: ["item"],
 		methods: {
 			markComplete() {
-				this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
+				// Couchbase JSON response
+				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
+				this.item.completed = !this.item.completed;
 			},
 			deleteTodo(e) {
 				e.preventDefault();
 				const todoId = {
-					id: this.item.id,					
+					// Couchbase JSON response
+					// id: thos.item.id
+					id: this.item._id					
 				}
 
 				this.$emit('delete-todo', todoId);
