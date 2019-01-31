@@ -7,7 +7,6 @@ const router = express.Router();
 // Get todos
 router.get('/', (req, res) => {
 	const bucket = connectCB();
-	console.log("bucket connected");
 
 	const N1qlQuery = couchbase.N1qlQuery;
 	const query = N1qlQuery.fromString("select meta().id as id, * from ToDoAppBucket");
@@ -18,7 +17,6 @@ router.get('/', (req, res) => {
 		} else if (rows.length == 0){
 			res.status(200).json({"status": "no todos present"});
 		} else {
-			console.log("Success!");
 			res.json(rows);
 		}
 	});
@@ -28,7 +26,6 @@ router.get('/', (req, res) => {
 // Add todos
 router.post('/', (req, res) => {
 	const bucket = connectCB();
-	console.log("bucket connected");
 
 	const data = {
 		"title": req.body.text,
@@ -48,7 +45,6 @@ router.post('/', (req, res) => {
 //Delete todo
 router.delete('/:id', (req, res) => {
 	const bucket = connectCB();
-	console.log("bucket connected delete");
 
 	const id = req.params.id;
 
