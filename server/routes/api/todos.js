@@ -1,9 +1,51 @@
 const express = require('express');
-const couchbase = require('couchbase');
 const uuidv4 = require('uuid/v4');
+
+// const couchbase = require('couchbase');
+const mongodb = require('mongodb');
 
 const router = express.Router();
 
+// MongoDB implementation
+// Get todos
+router.get('/', async (req, res) => {
+	const todoCollection = await connectMongoDB();
+	//console.log(await todoCollection.find({}).toArray());
+	res.send(await todoCollection.find({}).toArray());
+});
+
+// Add todo
+router.post('/', async (req, res) => {
+	const todoCollection = await connectMongoDB();
+
+	const data = {
+		"title": req.body.text,
+		"completed": false
+	}
+
+	await todoCollection.insertOne(data);
+
+	res.status(201).send();
+
+});
+
+// delete todo
+router.delete('/:id', async (req, res) => {
+	const todoCollection = await connectMongoDB();
+
+	await todoCollection.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
+	res.status(200).send();
+});
+
+async function connectMongoDB(){
+	const client = await mongodb.MongoClient.connect(
+		'mongodb+srv://hiidamian1:Cymadeagle1!@sideprojects-xmkod.mongodb.net/test?retryWrites=true', {
+			useNewUrlParser: true
+		});
+	return client.db('ToDoAppDB').collection('ToDos');
+}
+
+/* Couchbase implementation
 // Get todos
 router.get('/', (req, res) => {
 	const bucket = connectCB();
@@ -70,6 +112,6 @@ function connectCB() {
 	})
 
 	return bucket;
-}
+}*/
 
 module.exports = router;
