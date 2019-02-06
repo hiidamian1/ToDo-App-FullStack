@@ -3,7 +3,7 @@
 		<div>
 			<form @submit="addTodo">
 				<input type="text" v-model="title" name="todoTitle" placeholder="Add Todo here">
-				<input type="submit" class="submitButton">
+				<input type="submit" value="Add" class="submitButton">
 			</form>
 		</div>
 	</div>

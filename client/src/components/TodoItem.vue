@@ -4,8 +4,16 @@
 		<div class="todo-item" v-bind:class="{'is-complete': item.ToDoAppBucket.completed}" v-on:click="markComplete">
 			{{item.ToDoAppBucket.title}}
 		</div>-->
-		<div class="todo-item" v-bind:class="{'is-complete': item.completed}" v-on:click="markComplete">
-			{{item.title}}
+		<div class="todo-item" v-on:click="markComplete">
+			<div v-bind:class="{'is-complete': item.completed}">
+				{{item.title}}
+			</div>
+			<div class="tooltip" v-if="item.completed">
+				Mark Uncomplete
+			</div>
+			<div class="tooltip" v-else>
+				Mark Complete
+			</div>
 		</div>
 		<button class='deleteButton' v-on:click="deleteTodo">Delete</button>
 	</div>
@@ -16,10 +24,13 @@
 		name: "TodoItem",
 		props: ["item"],
 		methods: {
-			markComplete(e) {
+			markComplete() {
 				// Couchbase JSON response
 				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
-				e.preventDefault();
+				// e.preventDefault();
+				
+				// this.item.completed = !this.item.completed;
+
 				const update = {
 					id: this.item._id,
 					completed: !this.item.completed
@@ -71,4 +82,21 @@
 	.is-complete {
 		text-decoration: line-through;
 	}
+
+	.tooltip {
+		display: flex;
+		visibility: hidden;
+		position:relative;
+		color: #333;
+		padding: 2px;
+		font-size: 12px;
+		margin: 0px 5px;
+		justify-content: center;
+		flex-direction: column;
+	}
+
+	.todo-item:hover .tooltip {
+		visibility: visible;
+	}
+
 </style>
