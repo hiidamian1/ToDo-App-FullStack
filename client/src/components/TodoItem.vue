@@ -16,10 +16,16 @@
 		name: "TodoItem",
 		props: ["item"],
 		methods: {
-			markComplete() {
+			markComplete(e) {
 				// Couchbase JSON response
 				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
-				this.item.completed = !this.item.completed;
+				e.preventDefault();
+				const update = {
+					id: this.item._id,
+					completed: !this.item.completed
+				}
+
+				this.$emit('update-todo', update);
 			},
 			deleteTodo(e) {
 				e.preventDefault();

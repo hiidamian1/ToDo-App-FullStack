@@ -1,5 +1,4 @@
 const express = require('express');
-const uuidv4 = require('uuid/v4');
 
 // const couchbase = require('couchbase');
 const mongodb = require('mongodb');
@@ -34,6 +33,19 @@ router.delete('/:id', async (req, res) => {
 	const todoCollection = await connectMongoDB();
 
 	await todoCollection.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
+	res.status(200).send();
+});
+
+// update todo
+router.put('/', async (req, res) => {
+	const todoCollection = await connectMongoDB();
+
+	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
+		$set: {
+			"completed": req.body.completed
+		}
+	});
+
 	res.status(200).send();
 });
 

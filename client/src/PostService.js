@@ -16,16 +16,24 @@ class PostService {
 		})
 	}
 	
-	// Create todos
+	// Create todo
 	static addTodo(text) {
 		return axios.post(url, {
 			text
 		});
 	}
 
-	// Delete todos
+	// Delete todo
 	static deleteTodo(id) {
 		return axios.delete(`${url}${id}`);
+	}
+
+	// Update todo
+	static updateTodo(id, completed) {
+		return axios.put(url, {
+			id, 
+			completed
+		});
 	}
 }
 

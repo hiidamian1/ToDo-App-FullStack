@@ -2,7 +2,7 @@
   <div id="app">
     <Header/>
     <TodoInput v-on:add-todo="addTodo"/>
-    <TodoList v-bind:todos="todos" v-on:delete-todo="deleteTodo"/>
+    <TodoList v-bind:todos="todos" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
   </div>
 </template>
 
@@ -38,7 +38,15 @@ export default {
         await PostService.deleteTodo(todoId.id);
         this.todos = await PostService.getTodos();
       } catch(err) {
-          this.error = err.message;
+        this.error = err.message;
+      }
+    },
+    async updateTodo(update) {
+      try {
+        await PostService.updateTodo(update.id, update.completed);
+        this.todos = await PostService.getTodos();
+      } catch(err) {
+        this.error = err.message
       }
     }
   },
