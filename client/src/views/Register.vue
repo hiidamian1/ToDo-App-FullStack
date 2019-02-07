@@ -1,7 +1,7 @@
 <template>
     <div class="login-box">
         <h3>Register</h3>
-        <input type="text" v-model="email" placeholder="Email">
+        <input type="text" v-model="username" placeholder="Username">
 		<input type="text" v-model="password" placeholder="Password">
         <input type="submit" v-on:click="register" value="Register">
     </div>
@@ -14,7 +14,7 @@ export default {
     name: "Register",
     data() {
         return {
-            email: "",
+            username: "",
             password: ""
         };
     },
@@ -22,9 +22,12 @@ export default {
         async register(e) {
             try {
                 e.preventDefault();
-                await UserService.registerUser(this.email, this.password);
+                const result = await UserService.registerUser(this.username, this.password);
+                console.log(result.status);
+                this.$router.push('/login');
             } catch(err) {
                 this.err = err.message;
+                alert(err.message);
             }
         }
     }

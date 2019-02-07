@@ -4,16 +4,16 @@ const url = '/api/users/';
 
 class UserService {
 
-    static registerUser(email, password) {
+    static registerUser(username, password) {
         return axios.post(`${url}register`, {
-            email, 
+            username, 
             password
         });
     }
 
-    static verifyUser(email, password) {
+    static verifyUser(username, password) {
         return axios.post(`${url}login`, {
-            email, 
+            username, 
             password
         });
     }

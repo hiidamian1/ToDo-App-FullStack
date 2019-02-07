@@ -1,19 +1,34 @@
 <template>
     <div class="login-box">
         <h3>Login</h3>
-        <input type="text" v-model="email" placeholder="Email">
+        <input type="text" v-model="username" placeholder="Username">
 		<input type="text" v-model="password" placeholder="Password">
-        <input type="submit" value="Login">
+        <input type="submit" v-on:click="login" value="Login">
     </div>
 </template>
 
 <script>
+import UserService from '../UserService.js';
+
 export default {
     name: "Login",
     data() {
         return {
-            email: "",
+            username: "",
             password: ""
+        }
+    },
+    methods: {
+        async login(e) {
+            try {
+                e.preventDefault();
+                const result = await UserService.verifyUser(this.username, this.password);
+                console.log(result.status);
+                this.$router.push('/');
+            } catch(err) {
+                this.err = err.message;
+                alert(err.message);
+            }
         }
     }
 }
