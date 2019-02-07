@@ -9,7 +9,11 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const todos = require('./routes/api/todos');
+const users = require('./routes/api/users');
+
 app.use('/api/todos', todos);
+app.use('/api/users', users);
+
 
 //handle production
 if (process.env.NODE_ENV == 'production') {
