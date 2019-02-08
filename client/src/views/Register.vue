@@ -22,12 +22,16 @@ export default {
         async register(e) {
             try {
                 e.preventDefault();
-                const result = await UserService.registerUser(this.username, this.password);
-                console.log(result.status);
-                this.$router.push('/login');
+                if (!this.username || !this.password) {
+                    alert("Please fill in both username and password fields.");
+                } else {
+                    const result = await UserService.registerUser(this.username, this.password);
+                    console.log(result.status);
+                    this.$router.push('/login');
+                }
             } catch(err) {
-                this.err = err.message;
-                alert(err.message);
+                // this.err = err.message;
+                alert("That username is already taken. Please try again.");
             }
         }
     }

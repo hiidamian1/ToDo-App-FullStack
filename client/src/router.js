@@ -6,12 +6,15 @@ import Register from './views/Register.vue'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/login',
@@ -32,4 +35,12 @@ export default new Router({
       component: Register
     }  
   ]
-})
+});
+
+/*router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.requiresAuth)) {
+
+  }
+});*/
+
+export default router;

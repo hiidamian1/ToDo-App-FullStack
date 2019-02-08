@@ -22,12 +22,17 @@ export default {
         async login(e) {
             try {
                 e.preventDefault();
-                const result = await UserService.verifyUser(this.username, this.password);
-                console.log(result.status);
-                this.$router.push('/');
+
+                if (!this.username || !this.password) {
+                    alert("Please fill in both username and password fields.");
+                } else {
+                    const result = await UserService.verifyUser(this.username, this.password);
+                    console.log(result.status);
+                    this.$router.push('/');
+                }
             } catch(err) {
-                this.err = err.message;
-                alert(err.message);
+                // this.err = err.message;
+                alert("Invalid username and password combination. Please try again.");
             }
         }
     }
