@@ -17,6 +17,10 @@ class UserService {
             password
         });
     }
+
+    static authenticateUser() {
+        return axios.get(`${url}authenticate`);
+    }
 }
 
 export default UserService;
