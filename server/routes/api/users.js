@@ -6,11 +6,6 @@ const passport = require('passport');
 const router = express.Router();
 const auth = require('../../config/auth');
 
-router.get('/authenticate', auth, (req, res) => {
-    //res.send({authenticated: true});
-    res.status(200).send();
-});
-
 router.post('/register', async (req, res) => {
     const users = await connectMongoDB();
 
@@ -19,7 +14,6 @@ router.post('/register', async (req, res) => {
     if (result.length == 0){
         bcrypt.hash(req.body.password, 10, async (err, hash) => {
             if (err) {
-                console.log("hash error");
                 res.status(418).send();
             } else {
                 await users.insertOne({"username": req.body.username, "password": hash});
@@ -36,6 +30,15 @@ router.post('/login', passport.authenticate('local', {
         failureRedirect: '/login' 
     })
 );
+
+router.get('/logout', (req, res) => {
+    req.logOut();
+    res.status(200).send();
+})
+
+router.get('/authenticate', auth, (req, res) => {
+    res.status(200).send();
+});
 
 async function connectMongoDB(){
 	const client = await mongodb.MongoClient.connect(

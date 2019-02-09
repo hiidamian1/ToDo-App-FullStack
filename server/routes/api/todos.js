@@ -9,8 +9,7 @@ const router = express.Router();
 // Get todos
 router.get('/', async (req, res) => {
 	const todoCollection = await connectMongoDB();
-	//console.log(await todoCollection.find({}).toArray());
-	res.send(await todoCollection.find({}).toArray());
+	res.send(await todoCollection.find({"username": req.user.username}).toArray());
 });
 
 // Add todo
@@ -18,6 +17,7 @@ router.post('/', async (req, res) => {
 	const todoCollection = await connectMongoDB();
 
 	const data = {
+		"username": req.user.username,
 		"title": req.body.text,
 		"completed": false
 	}

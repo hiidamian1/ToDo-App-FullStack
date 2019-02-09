@@ -21,6 +21,10 @@ class UserService {
     static authenticateUser() {
         return axios.get(`${url}authenticate`);
     }
+
+    static logoutUser() {
+        return axios.get(`${url}logout`);
+    }
 }
 
 export default UserService;

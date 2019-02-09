@@ -10,31 +10,25 @@ module.exports = (passport) => {
             
             const users = await usersAPI.connectMongoDB();
             const result = await users.findOne({"username": username});        
-            //console.log(result);
 
             if (!result) {
                 return done(null, false, {message: 'email not registered'});
-            } else {
-                bcrypt.compare(password, result.password, (err, match) => {
-                    if (err) {
-                        console.log("err");
-                        throw err;
-                    }
-
-                    if (!match) {
-                        console.log("mismatch");
-                        return done(null, false, {message: 'password does not match username'});
-                    } else {
-                        console.log("good");
-                        return done(null, result);
-                    }
-                });
             }
+            bcrypt.compare(password, result.password, (err, match) => {
+                if (err) {
+                    throw err;
+                }
+
+                if (!match) {
+                    return done(null, false, {message: 'password does not match username'});
+                }
+                
+                return done(null, result);
+            });
         })
     );
 
     passport.serializeUser( (user, done) => {
-        console.log(user);
         done(null, user._id);
     });
 
@@ -42,7 +36,6 @@ module.exports = (passport) => {
         try {
             const users = await usersAPI.connectMongoDB();
             const result = await users.findOne({"_id": new mongodb.ObjectID(id)});    
-            console.log(result);
             done(null, result);
         } catch (err) {
             done(err, false);

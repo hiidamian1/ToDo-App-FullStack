@@ -43,11 +43,8 @@ router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     try {
       await UserService.authenticateUser();
-      console.log("authenticated");
       next();
     } catch(err) {
-      console.log("authentication failed");
-      console.log(err);
       next({
         path: '/login',
         query: {
@@ -55,7 +52,6 @@ router.beforeEach(async (to, from, next) => {
         }
       });
     }
-    console.log('this requires auth');
   } else {
     next();
   }

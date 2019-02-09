@@ -28,7 +28,7 @@ export default {
         await PostService.addTodo(newTodo.title);
         this.todos = await PostService.getTodos();
       } catch(err) {
-          this.error = err.message;
+        this.error = err.message;
       }
     },
     async deleteTodo(todoId) {
