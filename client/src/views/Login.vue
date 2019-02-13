@@ -4,7 +4,7 @@
         <div class="login-box">
             <h3>Login</h3>
             <input type="text" v-model="username" placeholder="Username">
-            <input type="text" v-model="password" placeholder="Password">
+            <input type="password" v-model="password" placeholder="Password">
             <input type="submit" v-on:click="login" value="Login">
             <div>
                 Don"t have an account? 

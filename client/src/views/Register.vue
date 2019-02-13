@@ -4,7 +4,7 @@
         <div class="register-box">
             <h3>Register</h3>
             <input type="text" v-model="username" placeholder="Username">
-            <input type="text" v-model="password" placeholder="Password">
+            <input type="password" v-model="password" placeholder="Password">
             <input type="submit" v-on:click="register" value="Register">
         
             <div>
