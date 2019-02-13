@@ -1,7 +1,10 @@
 <template>
-  <div id="home">
-    <TodoInput v-on:add-todo="addTodo"/>
-    <TodoList v-bind:todos="todos" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
+  <div>
+    <Header/>
+    <div id="home">
+      <TodoInput v-on:add-todo="addTodo"/>
+      <TodoList v-bind:todos="todos" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
+    </div>
   </div>
 </template>
 
@@ -15,7 +18,8 @@ export default {
   name: "Home",
   components: {
     TodoList, 
-    TodoInput
+    TodoInput,
+    Header
   },
   data() {
     return {

@@ -1,5 +1,6 @@
 <template>
 	<div v-if="todos.length">
+		<Header/>
 		<!--Couchbase JSON response
 		<div v-bind:key="todo.id" v-for="todo in todos">-->
 		<div v-bind:key="todo._id" v-for="todo in todos">

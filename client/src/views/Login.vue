@@ -1,23 +1,30 @@
 <template>
-    <div class="login-box">
-        <h3>Login</h3>
-        <input type="text" v-model="username" placeholder="Username">
-		<input type="text" v-model="password" placeholder="Password">
-        <input type="submit" v-on:click="login" value="Login">
-        <div>
-            Don"t have an account? 
-            <router-link to="/register">
-                Register here.
-            </router-link>
+    <div>
+        <Header/>
+        <div class="login-box">
+            <h3>Login</h3>
+            <input type="text" v-model="username" placeholder="Username">
+            <input type="text" v-model="password" placeholder="Password">
+            <input type="submit" v-on:click="login" value="Login">
+            <div>
+                Don"t have an account? 
+                <router-link to="/register">
+                    Register here.
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import UserService from "../UserService.js";
+import Header from "../components/Header";
 
 export default {
     name: "Login",
+    components: {
+        Header
+    },
     data() {
         return {
             username: "",
@@ -31,7 +38,7 @@ export default {
                 if (!this.username || !this.password) {
                     alert("Please fill in both username and password fields.");
                 } else {
-                    const result = await UserService.verifyUser(this.username, this.password);
+                    await UserService.verifyUser(this.username, this.password);
                     this.$router.push("/");
                 }
             } catch(err) {

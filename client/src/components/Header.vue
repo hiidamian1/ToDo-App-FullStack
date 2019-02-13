@@ -28,7 +28,6 @@
 			}
 		},
 		async created() {
-			console.log("header created");
 			try {
 				await UserService.authenticateUser(); 
 				this.loggedIn = true;

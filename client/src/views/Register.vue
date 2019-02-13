@@ -1,24 +1,31 @@
 <template>
-    <div class="register-box">
-        <h3>Register</h3>
-        <input type="text" v-model="username" placeholder="Username">
-		<input type="text" v-model="password" placeholder="Password">
-        <input type="submit" v-on:click="register" value="Register">
-    
-        <div>
-            Already have an account? 
-            <router-link to="/login">
-                Login here.
-            </router-link>
+    <div>
+        <Header/>
+        <div class="register-box">
+            <h3>Register</h3>
+            <input type="text" v-model="username" placeholder="Username">
+            <input type="text" v-model="password" placeholder="Password">
+            <input type="submit" v-on:click="register" value="Register">
+        
+            <div>
+                Already have an account? 
+                <router-link to="/login">
+                    Login here.
+                </router-link>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import UserService from "../UserService.js";
+import Header from "../components/Header";
 
 export default {
     name: "Register",
+    components: {
+        Header
+    },
     data() {
         return {
             username: "",
@@ -32,7 +39,7 @@ export default {
                 if (!this.username || !this.password) {
                     alert("Please fill in both username and password fields.");
                 } else {
-                    const result = await UserService.registerUser(this.username, this.password);
+                    await UserService.registerUser(this.username, this.password);
                     this.$router.push("/login");
                 }
             } catch(err) {
