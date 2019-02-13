@@ -61,7 +61,7 @@ export default {
         border: 1px #ccc dotted;
     }
 
-    input[type=text] {
+    input[type=text], input[type=password]{
         display:block;
         margin: 20px auto;
     }
