@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const url = '/api/todos/';
+const url = "/api/todos/";
 
 class PostService {
 	// Get todos

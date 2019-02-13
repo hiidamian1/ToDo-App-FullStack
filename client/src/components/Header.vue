@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import UserService from '../UserService.js';
+	import UserService from "../UserService.js";
 
 	export default {
 		name: "Header",
@@ -18,17 +18,17 @@
 		methods: {
 			async logout(e) {
 				e.preventDefault();
-
 				try {
 					await UserService.logoutUser();
 					this.loggedIn = false;
-					this.$router.push('/login');
+					this.$router.push("/login");
 				} catch(err) {
 					throw(err);
 				}
 			}
 		},
 		async created() {
+			console.log("header created");
 			try {
 				await UserService.authenticateUser(); 
 				this.loggedIn = true;

@@ -1,18 +1,17 @@
-const LocalStrategy = require('passport-local').Strategy;
-const mongodb = require('mongodb');
-const bcrypt = require('bcryptjs');
-const usersAPI = require('../routes/api/users');
-
+const LocalStrategy = require("passport-local").Strategy;
+const mongodb = require("mongodb");
+const bcrypt = require("bcryptjs");
+const connectMongoDB = require("../routes/api/connect");
+const collection = "Users";
 
 module.exports = (passport) => {
     passport.use(
-        new LocalStrategy({usernameField: 'username'}, async (username, password, done) => {
-            
-            const users = await usersAPI.connectMongoDB();
+        new LocalStrategy({usernameField: "username"}, async (username, password, done) => {
+            const users = await connectMongoDB(collection);
             const result = await users.findOne({"username": username});        
 
             if (!result) {
-                return done(null, false, {message: 'email not registered'});
+                return done(null, false, {message: "email not registered"});
             }
             bcrypt.compare(password, result.password, (err, match) => {
                 if (err) {
@@ -20,7 +19,7 @@ module.exports = (passport) => {
                 }
 
                 if (!match) {
-                    return done(null, false, {message: 'password does not match username'});
+                    return done(null, false, {message: "password does not match username"});
                 }
                 
                 return done(null, result);
@@ -34,7 +33,7 @@ module.exports = (passport) => {
 
     passport.deserializeUser( async (id, done) => {
         try {
-            const users = await usersAPI.connectMongoDB();
+            const users = await connectMongoDB(collection);
             const result = await users.findOne({"_id": new mongodb.ObjectID(id)});    
             done(null, result);
         } catch (err) {

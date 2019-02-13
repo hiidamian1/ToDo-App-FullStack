@@ -18,11 +18,10 @@ export default {
 	},
 	methods: {
 		deleteTodo(todoId) {
-			this.$emit('delete-todo', todoId);
+			this.$emit("delete-todo", todoId);
 		},
-
 		updateTodo(update) {
-			this.$emit('update-todo', update);
+			this.$emit("update-todo", update);
 		}
 	},
 	props:["todos"]

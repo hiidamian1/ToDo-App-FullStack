@@ -1,20 +1,22 @@
-const express = require('express');
+const express = require("express");
 
-// const couchbase = require('couchbase');
-const mongodb = require('mongodb');
+// const couchbase = require("couchbase");
+const mongodb = require("mongodb");
 
 const router = express.Router();
+const connectMongoDB = require("./connect");
+const collection = "ToDos";
 
 // MongoDB implementation
 // Get todos
-router.get('/', async (req, res) => {
-	const todoCollection = await connectMongoDB();
+router.get("/", async (req, res) => {
+	const todoCollection = await connectMongoDB(collection);
 	res.send(await todoCollection.find({"username": req.user.username}).toArray());
 });
 
 // Add todo
-router.post('/', async (req, res) => {
-	const todoCollection = await connectMongoDB();
+router.post("/", async (req, res) => {
+	const todoCollection = await connectMongoDB(collection);
 
 	const data = {
 		"username": req.user.username,
@@ -29,16 +31,16 @@ router.post('/', async (req, res) => {
 });
 
 // delete todo
-router.delete('/:id', async (req, res) => {
-	const todoCollection = await connectMongoDB();
+router.delete("/:id", async (req, res) => {
+	const todoCollection = await connectMongoDB(collection);
 
 	await todoCollection.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
 	res.status(200).send();
 });
 
 // update todo
-router.put('/', async (req, res) => {
-	const todoCollection = await connectMongoDB();
+router.put("/", async (req, res) => {
+	const todoCollection = await connectMongoDB(collection);
 
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
@@ -49,17 +51,17 @@ router.put('/', async (req, res) => {
 	res.status(200).send();
 });
 
-async function connectMongoDB(){
+/*async function connectMongoDB(collection){
 	const client = await mongodb.MongoClient.connect(
-		'mongodb+srv://hiidamian1:Cymadeagle1!@sideprojects-xmkod.mongodb.net/test?retryWrites=true', {
+		"mongodb+srv://hiidamian1:Cymadeagle1!@sideprojects-xmkod.mongodb.net/test?retryWrites=true", {
 			useNewUrlParser: true
 		});
-	return client.db('ToDoAppDB').collection('ToDos');
+	return client.db("ToDoAppDB").collection(collection);
 }
 
-/* Couchbase implementation
+Couchbase implementation
 // Get todos
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
 	const bucket = connectCB();
 
 	const N1qlQuery = couchbase.N1qlQuery;
@@ -78,7 +80,7 @@ router.get('/', (req, res) => {
 });
 
 // Add todos
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
 	const bucket = connectCB();
 
 	const data = {
@@ -97,7 +99,7 @@ router.post('/', (req, res) => {
 });
 
 //Delete todo
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
 	const bucket = connectCB();
 
 	const id = req.params.id;
@@ -113,13 +115,13 @@ router.delete('/:id', (req, res) => {
 });
 
 function connectCB() {
-	const cluster = new couchbase.Cluster('127.0.0.1:8091');
+	const cluster = new couchbase.Cluster("127.0.0.1:8091");
 
-	const bucket = cluster.openBucket('ToDoAppBucket', 'Cymadeagle1!', err => {
+	const bucket = cluster.openBucket("ToDoAppBucket", "Cymadeagle1!", err => {
 		if (err){
 			throw err;
 		} else {
-			console.log('Success!');
+			console.log("Success!");
 		}
 	})
 

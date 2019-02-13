@@ -1,52 +1,49 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Home from './views/Home.vue'
-import Login from './views/Login.vue'
-import Register from './views/Register.vue'
-import UserService from './UserService.js';
+import Vue from "vue"
+import Router from "vue-router"
+import Home from "./views/Home.vue"
+import UserService from "./UserService.js";
 
 Vue.use(Router)
 
 let router = new Router({
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "home",
       component: Home,
       meta: {
         requiresAuth: true
       }
     },
     {
-      path: '/login',
-      name: 'login',
+      path: "/login",
+      name: "login",
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      // component: () => import(/* webpackChunkName: "about" */ './views/Login.vue')
-      component: Login
+      component: () => import(/* webpackChunkName: "about" */ "./views/Login.vue")
+      //component: Login
     },
     {
-      path: '/register',
-      name: 'register',
+      path: "/register",
+      name: "register",
       // route level code-splitting
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      // component: () => import(/* webpackChunkName: "about" */ './views/Login.vue')
-      component: Register
+      component: () => import(/* webpackChunkName: "about" */ "./views/Register.vue")
+      //component: Register
     }  
   ]
 });
 
 router.beforeEach(async (to, from, next) => {
-
   if (to.matched.some(record => record.meta.requiresAuth)) {
     try {
       await UserService.authenticateUser();
       next();
     } catch(err) {
       next({
-        path: '/login',
+        path: "/login",
         query: {
           redirect: to.fullPath
         }

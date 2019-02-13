@@ -15,20 +15,17 @@
 		name: "TodoInput",
 		data() {
 			return {
-				title: ''			
+				title: ""			
 			}
 		}, 
 		methods: {
 			addTodo(e) {
 				e.preventDefault();
-
 				const newTodo = {
 					title: this.title,					
 				}
-
-				this.$emit('add-todo', newTodo);
-
-				this.title = ''; //clear form
+				this.$emit("add-todo", newTodo);
+				this.title = ""; //clear form
 			}
 		}
 	}

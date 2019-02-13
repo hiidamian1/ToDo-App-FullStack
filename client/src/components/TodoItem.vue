@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- Couchbase JSON response 
-		<div class="todo-item" v-bind:class="{'is-complete': item.ToDoAppBucket.completed}" v-on:click="markComplete">
+		<div class="todo-item" v-bind:class="{"is-complete": item.ToDoAppBucket.completed}" v-on:click="markComplete">
 			{{item.ToDoAppBucket.title}}
 		</div>-->
 		<div class="todo-item" v-on:click="markComplete">
@@ -15,7 +15,7 @@
 				Mark Complete
 			</div>
 		</div>
-		<button class='deleteButton' v-on:click="deleteTodo">Delete</button>
+		<button class="deleteButton" v-on:click="deleteTodo">Delete</button>
 	</div>
 </template>
 
@@ -36,7 +36,7 @@
 					completed: !this.item.completed
 				}
 
-				this.$emit('update-todo', update);
+				this.$emit("update-todo", update);
 			},
 			deleteTodo(e) {
 				e.preventDefault();
@@ -45,8 +45,7 @@
 					// id: thos.item.id
 					id: this.item._id					
 				}
-
-				this.$emit('delete-todo', todoId);
+				this.$emit("delete-todo", todoId);
 			}
 		}
 	}

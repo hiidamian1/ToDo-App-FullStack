@@ -4,11 +4,17 @@
         <input type="text" v-model="username" placeholder="Username">
 		<input type="text" v-model="password" placeholder="Password">
         <input type="submit" v-on:click="login" value="Login">
+        <div>
+            Don"t have an account? 
+            <router-link to="/register">
+                Register here.
+            </router-link>
+        </div>
     </div>
 </template>
 
 <script>
-import UserService from '../UserService.js';
+import UserService from "../UserService.js";
 
 export default {
     name: "Login",
@@ -22,12 +28,11 @@ export default {
         async login(e) {
             try {
                 e.preventDefault();
-
                 if (!this.username || !this.password) {
                     alert("Please fill in both username and password fields.");
                 } else {
                     const result = await UserService.verifyUser(this.username, this.password);
-                    this.$router.push('/');
+                    this.$router.push("/");
                 }
             } catch(err) {
                 alert("Invalid username and password combination. Please try again.");
@@ -42,14 +47,11 @@ export default {
         background: #f4f4f4;
         top: 50px;
         width: 450px;
-        height: 200px;
         margin: 20px auto;
+        padding: 20px;
         text-align: center;
         font-weight: normal;
-    }
-
-    h3 {
-        padding: 15px;
+        border: 1px #ccc dotted;
     }
 
     input[type=text] {
@@ -59,7 +61,16 @@ export default {
 
     input[type=submit] {
         margin: 10px;
+        border: none;
+		background: #333;
+		color: #fff;
+		padding: 7px 12px;
+		cursor: pointer;
     }
+
+    input[type=submit]:hover {
+		background: #555;
+	}
 
     .buttons {
         margin: 0px auto;
