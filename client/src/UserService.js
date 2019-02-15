@@ -13,6 +13,7 @@ class UserService {
 
     //verify user credentials
     static verifyUser(username, password) {
+        console.log("verify");
         return axios.post(`${url}login`, {
             username, 
             password
@@ -21,6 +22,7 @@ class UserService {
 
     //see if user already logged in
     static authenticateUser() {
+        console.log("authenticate");
         return axios.get(`${url}authenticate`);
     }
 
