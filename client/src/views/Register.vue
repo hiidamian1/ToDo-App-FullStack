@@ -3,9 +3,14 @@
         <Header/>
         <div class="register-box">
             <h3>Register</h3>
-            <input type="text" v-model="username" placeholder="Username">
-            <input type="password" v-model="password" placeholder="Password">
-            <input type="submit" v-on:click="register" value="Register">
+            <div class="error" v-if="error.length">
+                {{error}}
+            </div>
+            <form @submit="register">
+                <input type="text" v-model="username" placeholder="Username" required>
+                <input type="password" v-model="password" placeholder="Password" required>
+                <input type="submit" value="Register">
+            </form>
         
             <div>
                 Already have an account? 
@@ -29,22 +34,18 @@ export default {
     data() {
         return {
             username: "",
-            password: ""
+            password: "",
+            error: ""
         };
     },
     methods: {
         async register(e) {
             try {
                 e.preventDefault();
-                if (!this.username || !this.password) {
-                    alert("Please fill in both username and password fields.");
-                } else {
-                    await UserService.registerUser(this.username, this.password);
-                    this.$router.push("/login");
-                }
+                await UserService.registerUser(this.username, this.password);
+                this.$router.push("/login");
             } catch(err) {
-                // this.err = err.message;
-                alert("That username is already taken. Please try again.");
+                this.error = "Username already exists. Please try again.";
             }
         }
     }
@@ -61,6 +62,13 @@ export default {
         text-align: center;
         font-weight: normal;
         border: 1px #ccc dotted;
+    }
+
+    .error {
+        width: 75%;
+        background: red;
+        margin: 20px auto;
+        padding: 5px;
     }
 
     input[type=text], input[type=password]{

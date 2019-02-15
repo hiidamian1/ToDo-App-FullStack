@@ -2,9 +2,8 @@
 	<div>
 		<div>
 			<form @submit="addTodo">
-				<input type="text" v-model="title" name="todoTitle" placeholder="Add Todo here">
+				<input type="text" v-model="title" name="todoTitle" placeholder="Add Todo here" required>
 				<input type="submit" value="Add" class="submitButton">
-				
 			</form>
 		</div>
 	</div>

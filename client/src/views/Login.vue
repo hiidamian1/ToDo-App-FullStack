@@ -3,11 +3,16 @@
         <Header/>
         <div class="login-box">
             <h3>Login</h3>
-            <input type="text" v-model="username" placeholder="Username">
-            <input type="password" v-model="password" placeholder="Password">
-            <input type="submit" v-on:click="login" value="Login">
+            <div class="error" v-if="error.length">
+                {{error}}
+            </div>
+            <form @submit="login">
+                <input type="text" v-model="username" placeholder="Username" required>
+                <input type="password" v-model="password" placeholder="Password" required>
+                <input type="submit" value="Login">
+            </form>
             <div>
-                Don"t have an account? 
+                Don't have an account? 
                 <router-link to="/register">
                     Register here.
                 </router-link>
@@ -28,21 +33,18 @@ export default {
     data() {
         return {
             username: "",
-            password: ""
+            password: "",
+            error: ""
         }
     },
     methods: {
         async login(e) {
             try {
                 e.preventDefault();
-                if (!this.username || !this.password) {
-                    alert("Please fill in both username and password fields.");
-                } else {
-                    await UserService.verifyUser(this.username, this.password);
-                    this.$router.push("/");
-                }
+                await UserService.verifyUser(this.username, this.password);
+                this.$router.push("/");
             } catch(err) {
-                alert("Invalid username and password combination. Please try again.");
+                this.error = "Username and Password mismatch, or username unregistered. Please try again.";
             }
         }
     }
@@ -59,6 +61,13 @@ export default {
         text-align: center;
         font-weight: normal;
         border: 1px #ccc dotted;
+    }
+
+    .error {
+        width: 75%;
+        background: red;
+        margin: 20px auto;
+        padding: 5px;
     }
 
     input[type=text], input[type=password]{
