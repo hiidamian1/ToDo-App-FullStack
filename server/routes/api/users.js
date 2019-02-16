@@ -10,9 +10,9 @@ const collection = "Users";
 router.post("/register", async (req, res) => {
     const users = await connectMongoDB(collection);
 
-    const result = await users.find({"username": req.body.username}).toArray();
+    const result = await users.findOne({"username": req.body.username});
     
-    if (result.length == 0){
+    if (!result){
         bcrypt.hash(req.body.password, 10, async (err, hash) => {
             if (err) {
                 res.status(418).send();

@@ -11,6 +11,7 @@ module.exports = (passport) => {
             const result = await users.findOne({"username": username});        
 
             if (!result) {
+                console.log("email unregistered");
                 return done(null, false, {message: "email not registered"});
             }
             bcrypt.compare(password, result.password, (err, match) => {
@@ -19,9 +20,10 @@ module.exports = (passport) => {
                 }
 
                 if (!match) {
+                    console.log("email/password mismatch");
                     return done(null, false, {message: "password does not match username"});
                 }
-                
+                console.log("match");
                 return done(null, result);
             });
         })
