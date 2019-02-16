@@ -40,7 +40,6 @@ let router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    console.log("requiresAuth");
     try {
       await UserService.authenticateUser();
       next();
