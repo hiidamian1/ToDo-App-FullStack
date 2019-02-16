@@ -26,16 +26,14 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.post("/login", passport.authenticate("local", {
-        successRedirect: "/",
-        failureRedirect: "/login" 
-    })
-);
+router.post("/login", passport.authenticate("local"), (req, res) => {
+        res.status(200).send();
+});
 
 router.get("/logout", (req, res) => {
     req.logOut();
     res.status(200).send();
-})
+});
 
 router.get("/authenticate", auth, (req, res) => {
     res.status(200).send();
