@@ -1,5 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const boolParser = require("express-query-boolean");
+const dateParser = require("express-query-date");
 const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
@@ -11,6 +13,8 @@ require("./config/passport")(passport);
 
 //dependencies
 app.use(bodyParser.json());
+app.use(boolParser());
+app.use(dateParser());
 app.use(cors());
 
 //session

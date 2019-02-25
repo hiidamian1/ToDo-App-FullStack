@@ -4,15 +4,25 @@
 		<div class="todo-item" v-bind:class="{"is-complete": item.ToDoAppBucket.completed}" v-on:click="markComplete">
 			{{item.ToDoAppBucket.title}}
 		</div>-->
-		<div class="todo-item" v-on:click="markComplete">
-			<div v-bind:class="{'is-complete': item.completed}">
-				{{item.title}}
+		<div class="todo-item">
+			<div class="todo-text" v-on:click="markComplete">
+				<div v-bind:class="{'is-complete': item.completed}">
+					{{item.title}}
+				</div>
+
+				<div class="tooltip" v-if="item.completed">
+					Mark Uncomplete
+				</div>
+				<div class="tooltip" v-else>
+					Mark Complete
+				</div>
 			</div>
-			<div class="tooltip" v-if="item.completed">
-				Mark Uncomplete
-			</div>
-			<div class="tooltip" v-else>
-				Mark Complete
+			<!--likely need to emit something here. emit on change?-->
+			<div class="todo-deadline">
+				<Datepicker/>
+				<div class="tooltip">
+					Add Deadline
+				</div>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">Delete</button>
@@ -20,9 +30,14 @@
 </template>
 
 <script>
+	import Datepicker from "vuejs-datepicker";
+
 	export default {
 		name: "TodoItem",
 		props: ["item"],
+		components: {
+			Datepicker
+		},
 		methods: {
 			markComplete() {
 				// Couchbase JSON response
@@ -38,11 +53,14 @@
 
 				this.$emit("update-todo", update);
 			},
+			addDeadline(e) {
+
+			},
 			deleteTodo(e) {
 				e.preventDefault();
 				const todoId = {
 					// Couchbase JSON response
-					// id: thos.item.id
+					// id: this.item.id
 					id: this.item._id					
 				}
 				this.$emit("delete-todo", todoId);
@@ -55,6 +73,19 @@
 	div {
 		display: flex;
 	}
+	
+	.todo-item {
+		flex: 10;
+		background: #f4f4f4;
+		padding: 7px;
+		border-bottom: 1px #ccc dotted;
+		cursor: pointer;
+	}
+	
+	.todo-text {
+		flex: 1;
+	}
+
 
 	.deleteButton {
 		display: inline-block;
@@ -68,14 +99,6 @@
 
 	.deleteButton:hover {
 		background: #ff3333;
-	}
-
-	.todo-item {
-		flex: 10;
-		background: #f4f4f4;
-		padding: 7px;
-		border-bottom: 1px #ccc dotted;
-		cursor: pointer;
 	}
 
 	.is-complete {

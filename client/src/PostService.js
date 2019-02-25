@@ -4,10 +4,12 @@ const url = "/api/todos/";
 
 class PostService {
 	// Get todos
-	static getTodos() {
+	static getTodos(listParams) {
 		return new Promise(async (resolve, reject) =>{
 			try {
-				const res = await axios.get(url);
+				const res = await axios.get(url, {
+					params: listParams
+				});
 				const data = res.data;
 				resolve(data);
 			} catch(err) {

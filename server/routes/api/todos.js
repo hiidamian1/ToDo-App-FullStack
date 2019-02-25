@@ -11,7 +11,22 @@ const collection = "ToDos";
 // Get todos
 router.get("/", async (req, res) => {
 	const todoCollection = await connectMongoDB(collection);
-	res.send(await todoCollection.find({"username": req.user.username}).toArray());
+
+	let filters = {"username": req.user.username}
+	const listParams = req.query;
+	//console.log(listParams);
+	if ("viewCompleted" in listParams){
+		filters.completed = listParams.viewCompleted;
+		//console.log(listParams.viewCompleted);
+	}
+
+	if ("deadline" in listParams){
+		filters.deadline = listParams.deadline;
+	}
+	
+	console.log(filters);
+	//console.log(await todoCollection.find(filters).toArray());
+	res.send(await todoCollection.find(filters).toArray());
 });
 
 // Add todo

@@ -39,7 +39,7 @@
 		flex: 10;
 		padding: 5px;
 	}
-
+	
 	.submitButton {
 		display: inline-block;
 		border: none;
