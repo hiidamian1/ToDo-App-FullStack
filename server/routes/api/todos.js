@@ -36,8 +36,11 @@ router.post("/", async (req, res) => {
 	const data = {
 		"username": req.user.username,
 		"title": req.body.text,
-		"completed": false
+		"completed": false,
+		"deadline": new Date()
 	}
+
+	console.log(data);
 
 	await todoCollection.insertOne(data);
 
@@ -59,7 +62,8 @@ router.put("/", async (req, res) => {
 
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
-			"completed": req.body.completed
+			"completed": req.body.completed,
+			"deadline": req.body.deadline
 		}
 	});
 

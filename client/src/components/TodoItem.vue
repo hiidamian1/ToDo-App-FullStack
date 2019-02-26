@@ -19,7 +19,7 @@
 			</div>
 			<!--likely need to emit something here. emit on change?-->
 			<div class="todo-deadline">
-				<Datepicker/>
+				<Datepicker @selected="addDeadline" v-bind:value="item.deadline"/>
 				<div class="tooltip">
 					Add Deadline
 				</div>
@@ -35,11 +35,17 @@
 	export default {
 		name: "TodoItem",
 		props: ["item"],
+		data() {
+			return {
+				//deadline: new Date()
+			}
+		},
 		components: {
 			Datepicker
 		},
 		methods: {
-			markComplete() {
+			update(date) {
+				// console.log(date);
 				// Couchbase JSON response
 				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
 				// e.preventDefault();
@@ -48,13 +54,25 @@
 
 				const update = {
 					id: this.item._id,
-					completed: !this.item.completed
 				}
+
+				if (date) {
+					update.deadline = date,
+					update.completed = this.item.completed
+				} else {
+					update.deadline = this.item.deadline,
+					update.completed = !this.item.completed
+				}
+
+				console.log(update);
 
 				this.$emit("update-todo", update);
 			},
-			addDeadline(e) {
-
+			addDeadline(date) {
+				this.update(date);
+			},
+			markComplete() {
+				this.update(null);
 			},
 			deleteTodo(e) {
 				e.preventDefault();

@@ -31,12 +31,21 @@ class PostService {
 	}
 
 	// Update todo
-	static updateTodo(id, completed) {
+	static updateTodo(id, completed, deadline) {
+		return axios.put(url, {
+			id, 
+			completed,
+			deadline
+		});
+	}
+
+	// Add
+	/* static updateTodo(id, completed) {
 		return axios.put(url, {
 			id, 
 			completed
 		});
-	}
+	}*/
 }
 
 export default PostService;
