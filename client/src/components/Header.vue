@@ -3,7 +3,7 @@
 		<h1>To Do List</h1>
 		<form @submit="update">
 			<input type="checkbox" v-model="viewCompleted"> View Completed
-			<input type="time" v-model="deadline"> Completed By
+			<Datepicker class="datepicker" v-model="deadline"/> Completed By
 			<input type="submit" value="Update">
 		</form>
 		<div class="logout"><a href="#" v-if="loggedIn" v-on:click="logout">Logout</a></div>
@@ -12,20 +12,25 @@
 
 <script>
 	import UserService from "../UserService.js";
+	import Datepicker from "vuejs-datepicker";
 
 	export default {
 		name: "Header",
+		components: {
+			Datepicker
+		},
 		data() {
 			return {
 				loggedIn: false,
 				viewCompleted: false,
-				deadline: ""
+				deadline: null
 			}
 		},
 		methods: {
 			update(e) {
 				e.preventDefault();
 				console.log("update");
+				console.log(this.deadline);
 				this.$emit("update", {viewCompleted: this.viewCompleted, deadline: this.deadline})
 			},
 			async logout(e) {
@@ -74,8 +79,8 @@
 		padding-left: 20px;
 	}
 
-	input[type=time] {
-		margin-left: 10px;
+	.datepicker {
+		color: black;
 	}
 
 	input[type=submit] {

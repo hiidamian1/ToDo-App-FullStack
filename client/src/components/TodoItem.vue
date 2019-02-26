@@ -56,6 +56,8 @@
 					id: this.item._id,
 				}
 
+				//console.log(date);
+
 				if (date) {
 					update.deadline = date,
 					update.completed = this.item.completed
@@ -64,7 +66,7 @@
 					update.completed = !this.item.completed
 				}
 
-				console.log(update);
+				//console.log(update);
 
 				this.$emit("update-todo", update);
 			},

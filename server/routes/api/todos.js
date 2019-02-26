@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
 	}
 
 	if ("deadline" in listParams){
-		filters.deadline = listParams.deadline;
+		filters.deadline = listParams.deadline.toDateString();
 	}
 	
 	console.log(filters);
@@ -37,10 +37,10 @@ router.post("/", async (req, res) => {
 		"username": req.user.username,
 		"title": req.body.text,
 		"completed": false,
-		"deadline": new Date()
+		"deadline": (new Date()).toDateString()
 	}
 
-	console.log(data);
+	console.log(data.deadline);
 
 	await todoCollection.insertOne(data);
 
@@ -59,11 +59,11 @@ router.delete("/:id", async (req, res) => {
 // update todo
 router.put("/", async (req, res) => {
 	const todoCollection = await connectMongoDB(collection);
-
+	console.log(`update ${(new Date(req.body.deadline)).toDateString()}`);
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
 			"completed": req.body.completed,
-			"deadline": req.body.deadline
+			"deadline": (new Date(req.body.deadline)).toDateString()
 		}
 	});
 

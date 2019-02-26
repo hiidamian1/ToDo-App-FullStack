@@ -32,6 +32,7 @@ class PostService {
 
 	// Update todo
 	static updateTodo(id, completed, deadline) {
+		console.log(deadline);
 		return axios.put(url, {
 			id, 
 			completed,
