@@ -17,7 +17,6 @@
 					Mark Complete
 				</div>
 			</div>
-			<!--likely need to emit something here. emit on change?-->
 			<div class="todo-deadline">
 				<Datepicker @selected="addDeadline" v-bind:value="item.deadline"/>
 				<div class="tooltip">
@@ -35,17 +34,11 @@
 	export default {
 		name: "TodoItem",
 		props: ["item"],
-		data() {
-			return {
-				//deadline: new Date()
-			}
-		},
 		components: {
 			Datepicker
 		},
 		methods: {
 			update(date) {
-				// console.log(date);
 				// Couchbase JSON response
 				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
 				// e.preventDefault();
@@ -56,8 +49,6 @@
 					id: this.item._id,
 				}
 
-				//console.log(date);
-
 				if (date) {
 					update.deadline = date,
 					update.completed = this.item.completed
@@ -66,7 +57,6 @@
 					update.completed = !this.item.completed
 				}
 
-				//console.log(update);
 
 				this.$emit("update-todo", update);
 			},

@@ -14,18 +14,15 @@ router.get("/", async (req, res) => {
 
 	let filters = {"username": req.user.username}
 	const listParams = req.query;
-	//console.log(listParams);
+
 	if ("hideCompleted" in listParams && listParams.hideCompleted){
 		filters.completed = false;
-		//console.log(listParams.hideCompleted);
 	}
 
 	if ("deadline" in listParams){
 		filters.deadline = listParams.deadline.toDateString();
 	}
 	
-	console.log(filters);
-	//console.log(await todoCollection.find(filters).toArray());
 	res.send(await todoCollection.find(filters).toArray());
 });
 
@@ -39,8 +36,6 @@ router.post("/", async (req, res) => {
 		"completed": false,
 		"deadline": (new Date()).toDateString()
 	}
-
-	console.log(data.deadline);
 
 	await todoCollection.insertOne(data);
 

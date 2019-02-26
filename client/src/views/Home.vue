@@ -49,7 +49,6 @@ export default {
     },
     async updateTodo(update) {
       try {
-        console.log(update.deadline);
         await PostService.updateTodo(update.id, update.completed, update.deadline);
         this.todos = await PostService.getTodos(this.filters); //fix to use current filters, whatever they are
       } catch(err) {

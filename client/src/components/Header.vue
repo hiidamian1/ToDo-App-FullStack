@@ -10,9 +10,6 @@
 
 	export default {
 		name: "Header",
-		components: {
-			//Datepicker
-		},
 		data() {
 			return {
 				loggedIn: false,
@@ -23,9 +20,6 @@
 		methods: {
 			update(e) {
 				e.preventDefault();
-				console.log("update");
-				console.log(this.hideCompleted);
-				console.log(this.deadline);
 				
 				let filters = {};
 

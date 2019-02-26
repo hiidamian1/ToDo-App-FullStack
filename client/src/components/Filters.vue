@@ -23,9 +23,6 @@
     methods: {
       update(e) {
 				e.preventDefault();
-				console.log("update");
-				console.log(this.hideCompleted);
-				console.log(this.deadline);
 				
 				let filters = {};
 
