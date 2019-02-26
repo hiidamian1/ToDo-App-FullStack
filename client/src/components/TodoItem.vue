@@ -106,7 +106,6 @@
 		flex: 1;
 	}
 
-
 	.deleteButton {
 		display: inline-block;
 		border: none;

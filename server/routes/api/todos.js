@@ -15,9 +15,9 @@ router.get("/", async (req, res) => {
 	let filters = {"username": req.user.username}
 	const listParams = req.query;
 	//console.log(listParams);
-	if ("viewCompleted" in listParams){
-		filters.completed = listParams.viewCompleted;
-		//console.log(listParams.viewCompleted);
+	if ("hideCompleted" in listParams && listParams.hideCompleted){
+		filters.completed = false;
+		//console.log(listParams.hideCompleted);
 	}
 
 	if ("deadline" in listParams){
