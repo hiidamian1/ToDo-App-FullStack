@@ -20,7 +20,7 @@
         deadline: null,
         state: {
           disabledDates: {
-            to: this._disabledDate()
+            to: this._exclusiveCurrentDate()
           }
         }
       }
@@ -41,7 +41,7 @@
 
 				this.$emit("update", filters);
       },
-      _disabledDate() {
+      _exclusiveCurrentDate() {
 				let date = new Date();
 
 				date.setDate(date.getDate() - 1);

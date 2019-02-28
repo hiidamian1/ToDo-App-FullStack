@@ -6,7 +6,7 @@
 		</div>-->
 		<div class="todo-item">
 			<div class="todo-text" v-on:click="markComplete">
-				<div v-bind:class="{'is-complete': item.completed}">
+				<div v-bind:class="{'is-complete': item.completed, 'is-overdue': this.state.overdue}">
 					{{item.title}}
 				</div>
 
@@ -38,8 +38,9 @@
 			return {
 				state: {
 					disabledDates: {
-						to: this._disabledDate()
-					}
+						to: this._exclusiveCurrentDate()
+					},
+					overdue: false
 				}
 			}
 		},
@@ -59,11 +60,12 @@
 				}
 
 				if (date) {
-					update.deadline = date,
-					update.completed = this.item.completed
+					update.deadline = date;
+					update.completed = this.item.completed;
+					this.state.overdue = false;
 				} else {
-					update.deadline = this.item.deadline,
-					update.completed = !this.item.completed
+					update.deadline = this.item.deadline;
+					update.completed = !this.item.completed;
 				}
 
 
@@ -84,12 +86,20 @@
 				}
 				this.$emit("delete-todo", todoId);
 			},
-			_disabledDate() {
+			_exclusiveCurrentDate() {
 				let date = new Date();
 
 				date.setDate(date.getDate() - 1);
 				
 				return date;
+			}
+		},
+		created() {
+			const itemDate = new Date(this.item.deadline);
+			const currentDate = this._exclusiveCurrentDate();
+
+			if (itemDate < currentDate) {
+				this.state.overdue = true;
 			}
 		}
 	}
@@ -128,6 +138,10 @@
 
 	.is-complete {
 		text-decoration: line-through;
+	}
+
+	.is-overdue {
+		color: red;
 	}
 
 	.tooltip {
