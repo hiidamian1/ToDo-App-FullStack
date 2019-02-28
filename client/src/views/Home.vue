@@ -57,8 +57,6 @@ export default {
     },
     async updateTodoList(listParams) {
       try {
-        console.log("updating");
-        console.log(listParams);
         this.filters = listParams;
         this.todos = await PostService.getTodos(this.filters);
       } catch (err) {

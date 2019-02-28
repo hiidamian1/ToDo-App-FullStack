@@ -31,14 +31,12 @@
 				let filters = {};
 
 				if (this.hideCompleted) {
-          console.log("hide completed");
 					filters.hideCompleted = true;
 				}
 
 				if (this.deadline) {
 					filters.deadline = this.deadline;
 				}
-        console.log("emit");
 				this.$emit("update", filters);
       },
       _disabledDate() {
