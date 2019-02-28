@@ -1,7 +1,7 @@
 <template>
   <form @submit="update" class="root">
     <input type="checkbox" v-model="hideCompleted"> Hide Completed
-    <datepicker class="datepicker" v-model="deadline" :clear-button="true"/> Completed By
+    <Datepicker class="datepicker" v-bind:disabledDates="this.state.disabledDates" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> Completed By
     <input type="submit" value="Update">
   </form>
 </template>
@@ -17,7 +17,12 @@
     data() {
       return {
         hideCompleted: false,
-				deadline: null
+        deadline: null,
+        state: {
+          disabledDates: {
+            to: this._disabledDate()
+          }
+        }
       }
     },
     methods: {
@@ -35,6 +40,13 @@
 				}
 
 				this.$emit("update", filters);
+      },
+      _disabledDate() {
+				let date = new Date();
+
+				date.setDate(date.getDate() - 1);
+				
+				return date;
 			}
     }
   }
@@ -49,8 +61,12 @@
 	}
 
   .datepicker {
-    display:inline-block;
+    display: inline-block;
     color: black;
+  }
+
+  .fas {
+    color: white;
   }
 
   input[type=submit] {

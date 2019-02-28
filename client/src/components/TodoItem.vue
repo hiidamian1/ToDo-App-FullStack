@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="todo-deadline">
-				<Datepicker @selected="addDeadline" v-bind:value="item.deadline"/>
+				<Datepicker @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
 				<div class="tooltip">
 					Add Deadline
 				</div>
@@ -34,6 +34,15 @@
 	export default {
 		name: "TodoItem",
 		props: ["item"],
+		data() {
+			return {
+				state: {
+					disabledDates: {
+						to: this._disabledDate()
+					}
+				}
+			}
+		},
 		components: {
 			Datepicker
 		},
@@ -74,6 +83,13 @@
 					id: this.item._id					
 				}
 				this.$emit("delete-todo", todoId);
+			},
+			_disabledDate() {
+				let date = new Date();
+
+				date.setDate(date.getDate() - 1);
+				
+				return date;
 			}
 		}
 	}
