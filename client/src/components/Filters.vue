@@ -1,7 +1,7 @@
 <template>
   <form v-on:change="update" class="root">
     <input type="checkbox" v-model="hideCompleted"> Hide Completed
-    <Datepicker class="datepicker" v-on:input="update" v-bind:disabledDates="this.state.disabledDates" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> Completed By
+    <Datepicker class="datepicker" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> Completed By
   </form>
 </template>
 
@@ -17,15 +17,15 @@
       return {
         hideCompleted: false,
         deadline: null,
-        state: {
+        /*state: {
           disabledDates: {
             to: this._disabledDate()
           }
-        }
+        }*/
       }
     },
     methods: {
-      update(e) {
+      update() {
 				//e.preventDefault();
 				
 				let filters = {};
