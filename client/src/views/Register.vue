@@ -55,33 +55,33 @@ export default {
 <style scoped>
     .register-box {
         background: #f4f4f4;
-        top: 50px;
-        width: 450px;
-        margin: 20px auto;
-        padding: 20px;
+        top: 5rem;
+        width: 45rem;
+        margin: 2rem auto;
+        padding: 2rem;
         text-align: center;
         font-weight: normal;
-        border: 1px #ccc dotted;
+        border: .1rem #ccc dotted;
     }
 
     .error {
         width: 75%;
         background: red;
-        margin: 20px auto;
-        padding: 5px;
+        margin: 2rem auto;
+        padding: .5rem;
     }
 
     input[type=text], input[type=password]{
         display:block;
-        margin: 20px auto;
+        margin: 2rem auto;
     }
 
     input[type=submit] {
-        margin: 10px;
+        margin: 1rem;
         border: none;
 		background: #333;
 		color: #fff;
-		padding: 7px 12px;
+		padding: .7rem 1.2rem;
 		cursor: pointer;
     }
 
@@ -90,6 +90,6 @@ export default {
 	}
 
     .buttons {
-        margin: 0px auto;
+        margin: 0rem auto;
     }
 </style>

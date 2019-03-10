@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="root">
     <Header/>
     <Filters v-on:update="updateTodoList"/>
     <div id="home">
@@ -73,3 +73,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .root {
+    width: 100%;
+  }
+</style>
+

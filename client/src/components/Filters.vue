@@ -54,7 +54,7 @@
   .root {
 		background: #333;
     color: white;
-		padding: 10px;
+		padding: 1rem;
 		text-align: center;
     font-size: small;
 	}
@@ -69,11 +69,11 @@
   }
 
   input[type=submit] {
-    margin: 10px;
-    border: 1px solid white;
+    margin: 1rem;
+    border: .1rem solid white;
 		background: #333;
 		color: #fff;
-		padding: 7px 12px;
+		padding: .7rem 1.2rem;
 		cursor: pointer;
   }
 </style>

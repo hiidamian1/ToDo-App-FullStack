@@ -37,7 +37,7 @@
 
 	input[type="text"] {
 		flex: 10;
-		padding: 5px;
+		padding: .5rem;
 	}
 	
 	.submitButton {
@@ -45,7 +45,7 @@
 		border: none;
 		background: #333;
 		color: #fff;
-		padding: 7px 0px;
+		padding: .7rem 0rem;
 		cursor: pointer;
 		width: 7%;
 	}

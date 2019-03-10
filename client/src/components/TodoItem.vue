@@ -40,7 +40,8 @@
 					disabledDates: {
 						to: this._exclusiveCurrentDate()
 					},
-					overdue: false
+					overdue: false,
+					overdueComplete: false
 				}
 			}
 		},
@@ -48,34 +49,33 @@
 			Datepicker
 		},
 		methods: {
-			update(date) {
-				// Couchbase JSON response
-				// this.item.ToDoAppBucket.completed = !this.item.ToDoAppBucket.completed;
-				// e.preventDefault();
-				
-				// this.item.completed = !this.item.completed;
-
+			addDeadline(date) {
 				const update = {
 					id: this.item._id,
+					deadline: date,
+					completed: this.item.completed
 				}
-
-				if (date) {
-					update.deadline = date;
-					update.completed = this.item.completed;
-					this.state.overdue = false;
-				} else {
-					update.deadline = this.item.deadline;
-					update.completed = !this.item.completed;
-				}
-
 
 				this.$emit("update-todo", update);
 			},
-			addDeadline(date) {
-				this.update(date);
-			},
 			markComplete() {
-				this.update(null);
+				const update = {
+					id: this.item._id,
+					deadline: this.item.deadline,
+					completed: !this.item.completed
+				}
+
+				if (!this.item.completed && this.state.overdue) {
+					console.log("changing to black");
+					this.state.overdue = false;
+					this.overdueComplete = true;
+				} else if (this.overdueComplete) {
+					console.log("changing to red");
+					this.state.overdue = true;
+					this.overdueComplete = false;
+				}
+
+				this.$emit("update-todo", update);
 			},
 			deleteTodo(e) {
 				e.preventDefault();
@@ -98,7 +98,8 @@
 			const itemDate = new Date(this.item.deadline);
 			const currentDate = this._exclusiveCurrentDate();
 
-			if (itemDate < currentDate) {
+			if (itemDate < currentDate && !this.item.completed) {
+				console.log("overdue, created");
 				this.state.overdue = true;
 			}
 		}
@@ -113,13 +114,14 @@
 	.todo-item {
 		flex: 10;
 		background: #f4f4f4;
-		padding: 7px;
-		border-bottom: 1px #ccc dotted;
+		padding: .7rem;
+		border-bottom: .1rem #ccc dotted;
 		cursor: pointer;
 	}
 	
 	.todo-text {
 		flex: 1;
+		font-size: 1.6rem;
 	}
 
 	.deleteButton {
@@ -127,7 +129,7 @@
 		border: none;
 		background: red;
 		color: #fff;
-		padding: 7px 0px;
+		padding: .7rem 0rem;
 		cursor: pointer;
 		width: 7%;
 	}
@@ -149,9 +151,9 @@
 		visibility: hidden;
 		position:relative;
 		color: #333;
-		padding: 2px;
-		font-size: 12px;
-		margin: 0px 5px;
+		padding: .2rem;
+		font-size: 1.2rem;
+		margin: 0rem .5rem;
 		justify-content: center;
 		flex-direction: column;
 	}

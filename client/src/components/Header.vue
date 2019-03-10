@@ -1,7 +1,11 @@
 <template>
 	<header class="header">
 		<h1>To Do List</h1>
-		<div class="logout"><a href="#" v-if="loggedIn" v-on:click="logout">Logout</a></div>
+		<div class="logout">
+			<a href="#" v-if="loggedIn" v-on:click="logout">
+				Logout
+			</a>
+		</div>
 	</header>
 </template>
 
@@ -65,25 +69,13 @@
 	.header {
 		background: #333;
 		color: #fff;
-		padding: 10px;
+		padding: 1rem;
 		text-align: center;
-		border-bottom: 1px solid #555;
+		border-bottom: .1rem solid #555;
 	}
 
-	.header-text {
-		display:flex;
-	}
-
-	.logout-div {
-		flex: 1;
-		text-align: right;
-		padding-right: 20px;
-		margin: auto 0px;
-	}
-
-	.title-div {
-		flex: 1;
-		padding-left: 20px;
+	h1 {
+		font-size: 2.4rem;
 	}
 
 	a {
@@ -92,7 +84,8 @@
 	}
 
 	.logout {
-		margin-top: 10px;
+		margin-top: 1rem;
+		font-size: 1.2rem;
 	}
 
 </style>

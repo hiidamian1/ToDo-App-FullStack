@@ -17,4 +17,8 @@ export default {
     padding: 0;
     font-family: sans-serif;
   }
+
+  html {
+    font-size: 62.5%;
+  }
 </style>
