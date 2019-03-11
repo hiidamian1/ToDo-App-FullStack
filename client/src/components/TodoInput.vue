@@ -3,7 +3,9 @@
 		<div>
 			<form @submit="addTodo">
 				<input type="text" v-model="title" name="todoTitle" placeholder="Add Todo here" required>
-				<input type="submit" value="Add" class="submitButton">
+				<button type="submit" class="submitButton">
+					<i class="fas fa-plus"></i>
+				</button>
 			</form>
 		</div>
 	</div>

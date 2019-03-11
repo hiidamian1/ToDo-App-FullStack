@@ -21,7 +21,9 @@
 				<Datepicker @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
 			</div>
 		</div>
-		<button class="deleteButton" v-on:click="deleteTodo">Delete</button>
+		<button class="deleteButton" v-on:click="deleteTodo">
+			<i class="fas fa-times"></i>
+		</button>
 	</div>
 </template>
 

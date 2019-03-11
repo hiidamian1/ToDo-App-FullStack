@@ -1,7 +1,13 @@
 <template>
   <form v-on:change="update" class="root">
-    <input type="checkbox" v-model="hideCompleted"> Hide Completed
-    <Datepicker class="datepicker" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> Completed By
+    <div class="hide-completed-container">
+      Hide Completed
+      <input type="checkbox" v-model="hideCompleted">
+    </div>
+    <div class="datepicker-container">
+      Completed By
+      <Datepicker class="datepicker" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> 
+    </div>
   </form>
 </template>
 
@@ -52,16 +58,52 @@
 
 <style scoped>
   .root {
+    display: flex;
+    flex-direction: column;
 		background: #333;
     color: white;
 		padding: 1rem;
-		text-align: center;
+		align-items: center;
     font-size: small;
 	}
 
+  .datepicker-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: .5rem;
+  }
+
   .datepicker {
-    display: inline-block;
     color: black;
+    margin-left: .5rem;
+  }
+
+  .hide-completed-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @media(min-width:600px) {
+    .root {
+      flex-direction: row;
+      justify-content: center;
+    }
+
+    .datepicker-container {
+      flex-direction: row;
+      margin-top: 0rem;
+      margin-left: 1rem;
+    }
+
+    .hide-completed-container {
+      flex-direction: row;
+    }
+
+    input[type=checkbox] {
+      margin-left: .5rem;
+    }
   }
 
   .fas {
