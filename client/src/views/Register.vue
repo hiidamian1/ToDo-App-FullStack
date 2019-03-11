@@ -56,7 +56,7 @@ export default {
     .register-box {
         background: #f4f4f4;
         top: 5rem;
-        width: 45rem;
+        width: 50%;
         margin: 2rem auto;
         padding: 2rem;
         text-align: center;
@@ -74,6 +74,7 @@ export default {
     input[type=text], input[type=password]{
         display:block;
         margin: 2rem auto;
+        width: 100%;
     }
 
     input[type=submit] {

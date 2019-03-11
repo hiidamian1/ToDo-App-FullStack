@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="todo-item-root">
 		<!-- Couchbase JSON response 
 		<div class="todo-item" v-bind:class="{"is-complete": item.ToDoAppBucket.completed}" v-on:click="markComplete">
 			{{item.ToDoAppBucket.title}}
@@ -19,9 +19,6 @@
 			</div>
 			<div class="todo-deadline">
 				<Datepicker @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
-				<div class="tooltip">
-					Add Deadline
-				</div>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">Delete</button>
@@ -107,7 +104,7 @@
 </script>
 
 <style scoped>
-	div {
+	.todo-item-root {
 		display: flex;
 	}
 	
@@ -118,8 +115,15 @@
 		border-bottom: .1rem #ccc dotted;
 		cursor: pointer;
 	}
+
+	@media(min-width: 768px) {
+		.todo-item {
+			display: flex;
+		}
+	}
 	
 	.todo-text {
+		display: flex;
 		flex: 1;
 		font-size: 1.6rem;
 	}
