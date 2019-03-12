@@ -54,7 +54,6 @@ router.delete("/:id", async (req, res) => {
 // update todo
 router.put("/", async (req, res) => {
 	const todoCollection = await connectMongoDB(collection);
-	console.log(req.body);
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
 			"completed": req.body.completed,
