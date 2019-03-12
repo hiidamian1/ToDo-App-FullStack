@@ -3,7 +3,7 @@
 		<h1>To Do List</h1>
 		<div class="logout">
 			<a href="#" v-if="loggedIn" v-on:click="logout">
-				Logout
+				Logout {{username}}
 			</a>
 		</div>
 	</header>
@@ -14,6 +14,9 @@
 
 	export default {
 		name: "Header",
+		props: [
+			"username"
+		],
 		data() {
 			return {
 				loggedIn: false,

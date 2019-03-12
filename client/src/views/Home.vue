@@ -1,10 +1,10 @@
 <template>
   <div class="root">
-    <Header/>
-    <Filters v-on:update="updateTodoList"/>
+    <Header v-bind:username="this.$route.params.username"/>
+    <Filters v-bind:dateFormat="this.dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
-      <TodoList v-bind:todos="todos" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
+      <TodoList v-bind:todos="todos" v-bind:dateFormat="this.dateFormat" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
     </div>
   </div>
 </template>
@@ -27,7 +27,8 @@ export default {
   data() {
     return {
       todos: [],
-      filters: {}
+      filters: {},
+      dateFormat: "D dsu MMM yyyy"
     };
   },
   methods: {

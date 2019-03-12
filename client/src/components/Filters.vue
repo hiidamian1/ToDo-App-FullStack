@@ -6,7 +6,7 @@
     </div>
     <div class="datepicker-container">
       Completed By
-      <Datepicker class="datepicker" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> 
+      <Datepicker class="datepicker" v-bind:format="dateFormat" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> 
     </div>
   </form>
 </template>
@@ -19,21 +19,17 @@
     components: {
       Datepicker
     },
+    props: [
+      "dateFormat"
+    ],
     data() {
       return {
         hideCompleted: false,
-        deadline: null,
-        /*state: {
-          disabledDates: {
-            to: this._disabledDate()
-          }
-        }*/
+        deadline: null
       }
     },
     methods: {
-      update() {
-				//e.preventDefault();
-				
+      update() {				
 				let filters = {};
 
 				if (this.hideCompleted) {
@@ -76,7 +72,6 @@
 
   .datepicker {
     color: black;
-    margin-left: .5rem;
   }
 
   .hide-completed-container {
@@ -95,6 +90,10 @@
       flex-direction: row;
       margin-top: 0rem;
       margin-left: 1rem;
+    }
+
+    .datepicker {
+      margin-left: .5rem;
     }
 
     .hide-completed-container {

@@ -4,7 +4,7 @@
 		<!--Couchbase JSON response
 		<div v-bind:key="todo.id" v-for="todo in todos">-->
 		<div v-bind:key="todo._id" v-for="todo in todos">
-			<TodoItem v-bind:item="todo" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
+			<TodoItem v-bind:item="todo" v-bind:dateFormat="dateFormat" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
 		</div>
 	</div>
 </template>
@@ -17,6 +17,10 @@ export default {
 	components: {
 		TodoItem
 	},
+	props: [
+		"todos",
+		"dateFormat"
+	],
 	methods: {
 		deleteTodo(todoId) {
 			this.$emit("delete-todo", todoId);
@@ -24,7 +28,6 @@ export default {
 		updateTodo(update) {
 			this.$emit("update-todo", update);
 		}
-	},
-	props:["todos"]
+	}
 }
 </script>

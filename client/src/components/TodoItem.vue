@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="todo-deadline">
-				<Datepicker @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
+				<Datepicker v-bind:format="dateFormat" @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">
@@ -32,7 +32,10 @@
 
 	export default {
 		name: "TodoItem",
-		props: ["item"],
+		props: [
+			"item", 
+			"dateFormat"
+		],
 		data() {
 			return {
 				state: {
@@ -55,6 +58,10 @@
 					completed: this.item.completed
 				}
 
+				if (this.state.overdue) {
+					this.state.overdue = false;
+				}
+
 				this.$emit("update-todo", update);
 			},
 			markComplete() {
@@ -65,11 +72,9 @@
 				}
 
 				if (!this.item.completed && this.state.overdue) {
-					console.log("changing to black");
 					this.state.overdue = false;
 					this.overdueComplete = true;
 				} else if (this.overdueComplete) {
-					console.log("changing to red");
 					this.state.overdue = true;
 					this.overdueComplete = false;
 				}
@@ -98,7 +103,6 @@
 			const currentDate = this._exclusiveCurrentDate();
 
 			if (itemDate < currentDate && !this.item.completed) {
-				console.log("overdue, created");
 				this.state.overdue = true;
 			}
 		}
