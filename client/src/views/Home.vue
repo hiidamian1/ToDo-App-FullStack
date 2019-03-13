@@ -59,6 +59,7 @@ export default {
     async updateTodoList(listParams) {
       try {
         this.filters = listParams;
+        console.log(this.filters);
         this.todos = await PostService.getTodos(this.filters);
       } catch (err) {
         this.error = err.message;

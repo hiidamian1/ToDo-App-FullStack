@@ -20,7 +20,11 @@ router.get("/", async (req, res) => {
 	}
 
 	if ("deadline" in listParams){
-		filters.deadline = listParams.deadline.toDateString();
+		if (listParams.deadline.length == 1){
+			filters.deadline = new Date(listParams.deadline[0]).toDateString();
+		} else {
+			console.log("other");
+		}
 	}
 	
 	res.send(await todoCollection.find(filters).toArray());

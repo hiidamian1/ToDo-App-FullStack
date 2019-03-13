@@ -1,14 +1,25 @@
 <template>
-  <form v-on:change="update" class="root">
+  <div class="root">
     <div class="hide-completed-container">
       Hide Completed
-      <input type="checkbox" v-model="hideCompleted">
+      <input type="checkbox" v-on:change="update" v-model="hideCompleted">
     </div>
-    <div class="datepicker-container">
+    <div class="select-container">
+      Due
+      <select v-on:change="update" v-model="deadlineID">
+        <option v-bind:value="-1"> Select </option>
+        <option v-bind:value="0"> Today </option>
+        <option v-bind:value="1"> Tomorrow </option>
+        <option v-bind:value="2"> This Week </option>
+        <option v-bind:value="3"> Next Week </option>
+      </select>
+    </div>
+
+    <!--<div class="datepicker-container">
       Completed By
       <Datepicker class="datepicker" v-bind:format="dateFormat" v-on:input="update" v-model="deadline" :clear-button="true" clear-button-icon="fas fa-times"/> 
-    </div>
-  </form>
+    </div>-->
+  </div>
 </template>
 
 <script>
@@ -25,7 +36,7 @@
     data() {
       return {
         hideCompleted: false,
-        deadline: null
+        deadlineID: -1,
       }
     },
     methods: {
@@ -36,9 +47,11 @@
 					filters.hideCompleted = true;
 				}
 
-				if (this.deadline) {
-					filters.deadline = this.deadline;
-				}
+				if (this.deadlineID > -1) {
+          filters.deadline = this._idToDateArray(this.deadlineID);
+          console.log(filters.deadline);
+        }
+
 				this.$emit("update", filters);
       },
       _disabledDate() {
@@ -47,7 +60,48 @@
 				date.setDate(date.getDate() - 1);
 				
 				return date;
-			}
+      },
+      _idToDateArray(id) {
+        if (id <= 1) {
+          let date = new Date();
+
+          if (id == 1) {
+            date.setDate(date.getDate() + 1);
+          }
+
+          return [date];
+        } else if (id <= 3) {
+          let startDate = new Date();
+          let endDate = new Date();
+
+          if (id == 2) {
+            endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+          } else {
+            startDate.setDate(startDate.getDate() + 7 - startDate.getDay());
+            endDate.setDate(endDate.getDate() + 7 + (6 - endDate.getDay()));
+          }
+
+          return [startDate, endDate];
+        } else {
+          throw ("error! invalid text to date input");
+        }
+
+        /*if (id <= 1){
+          if (id == 0) {
+            return date;
+          } else if (id == 1) {
+            date.setDate(date.getDate() + 1);
+          } 
+        } else if (id <= 3) {
+          date.setDate(date.getDate() + (6 - date.getDay()));
+        } else if (id == 3) {
+          date.setDate(date.getDate() + 7 + (6 - date.getDay()));
+        } else {
+          throw ("error! invalid text to date input");
+        }
+        
+        return date;*/
+      }
     }
   }
 </script>
@@ -62,6 +116,17 @@
 		align-items: center;
     font-size: small;
 	}
+
+  .select-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: .5rem;
+  }
+  
+  .default {
+    color: #ccc;
+  }
 
   .datepicker-container {
     display: flex;
@@ -84,6 +149,16 @@
     .root {
       flex-direction: row;
       justify-content: center;
+    }
+
+    .select-container {
+      flex-direction: row;
+      margin-top: 0rem;
+      margin-left: 1rem;
+    }
+
+    select {
+      margin-left: .5rem;
     }
 
     .datepicker-container {
