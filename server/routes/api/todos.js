@@ -5,7 +5,10 @@ const mongodb = require("mongodb");
 
 const router = express.Router();
 const connectMongoDB = require("./connect");
+// const updateDB = require("./update");
 const collection = "ToDos";
+
+// updateDB({});
 
 // MongoDB implementation
 // Get todos
@@ -21,12 +24,40 @@ router.get("/", async (req, res) => {
 
 	if ("deadline" in listParams){
 		if (listParams.deadline.length == 1){
-			filters.deadline = new Date(listParams.deadline[0]).toDateString();
+			startDate = new Date(listParams.deadline[0]);
+			startDate.setHours(0, 0, 0, 0);
+			
+			endDate = new Date();
+			endDate.setDate(startDate.getDate() + 1);
+			endDate.setHours(0, 0, 0, 0);
+			console.log(`start ${startDate} end ${endDate}`);
+
+			const query = {
+				"$gte": startDate, 
+				"$lt": endDate
+			}
+
+			filters.deadline = query;
 		} else {
 			console.log("other");
+			startDate = new Date(listParams.deadline[0]);
+			startDate.setHours(0, 0, 0, 0);
+			
+			endDate = new Date(listParams.deadline[1]);
+			endDate.setHours(0, 0, 0, 0);
+			console.log(`start ${startDate} end ${endDate}`);
+
+			const query = {
+				"$gte": startDate, 
+				"$lt": endDate
+			}
+
+			filters.deadline = query;
 		}
 	}
 	
+	console.log(filters);
+
 	res.send(await todoCollection.find(filters).toArray());
 });
 
@@ -38,8 +69,10 @@ router.post("/", async (req, res) => {
 		"username": req.user.username,
 		"title": req.body.text,
 		"completed": false,
-		"deadline": (new Date()).toDateString()
+		"deadline": new Date()
 	}
+
+	data.deadline.setHours(0, 0, 0, 0);
 
 	await todoCollection.insertOne(data);
 
@@ -58,10 +91,14 @@ router.delete("/:id", async (req, res) => {
 // update todo
 router.put("/", async (req, res) => {
 	const todoCollection = await connectMongoDB(collection);
+	
+	const deadline = new Date(req.body.deadline);
+	deadline.setHours(0, 0, 0, 0);
+
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
 			"completed": req.body.completed,
-			"deadline": (new Date(req.body.deadline)).toDateString()
+			"deadline": deadline
 		}
 	});
 
