@@ -30,7 +30,6 @@ router.get("/", async (req, res) => {
 			endDate = new Date();
 			endDate.setDate(startDate.getDate() + 1);
 			endDate.setHours(0, 0, 0, 0);
-			console.log(`start ${startDate} end ${endDate}`);
 
 			const query = {
 				"$gte": startDate, 
@@ -39,25 +38,26 @@ router.get("/", async (req, res) => {
 
 			filters.deadline = query;
 		} else {
-			console.log("other");
-			startDate = new Date(listParams.deadline[0]);
-			startDate.setHours(0, 0, 0, 0);
-			
-			endDate = new Date(listParams.deadline[1]);
-			endDate.setHours(0, 0, 0, 0);
-			console.log(`start ${startDate} end ${endDate}`);
+			const query = {};
 
-			const query = {
-				"$gte": startDate, 
-				"$lt": endDate
+			if (listParams.deadline[0]) {
+				startDate = new Date(listParams.deadline[0]);
+				startDate.setHours(0, 0, 0, 0);
+
+				query.$gte = startDate;
+			}
+			
+			if (listParams.deadline[1]) {
+				endDate = new Date(listParams.deadline[1]);
+				endDate.setHours(0, 0, 0, 0);
+
+				query.$lte = endDate;
 			}
 
 			filters.deadline = query;
 		}
 	}
 	
-	console.log(filters);
-
 	res.send(await todoCollection.find(filters).toArray());
 });
 
