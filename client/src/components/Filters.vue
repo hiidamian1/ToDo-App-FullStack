@@ -4,15 +4,25 @@
       Hide Completed
       <input type="checkbox" v-on:change="update" v-model="hideCompleted">
     </div>
-    <div class="select-container">
+    <div class="deadline-container">
       Due
-      <select v-on:change="update" v-model="deadlineID">
-        <option v-bind:value="-1"> Select </option>
-        <option v-bind:value="0"> Today </option>
-        <option v-bind:value="1"> Tomorrow </option>
-        <option v-bind:value="2"> This Week </option>
-        <option v-bind:value="3"> Next Week </option>
+      <select v-if="!displayDatepicker" v-on:change="update" v-model="deadlineID">
+        <option value="-1"> Select </option>
+        <option value="0"> Today </option>
+        <option value="1"> Tomorrow </option>
+        <option value="2"> This Week </option>
+        <option value="3"> Next Week </option>
+        <option value="4"> Custom... </option>
       </select>
+      
+      <div class="datepicker-container" v-else>
+        <div class="datepickers">
+          <Datepicker class="datepicker" placeholder="Start" v-bind:format="dateFormat" v-model="datepickerStartDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
+          <Datepicker class="datepicker" placeholder="End" v-bind:format="dateFormat" v-model="datepickerEndDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
+        </div>
+        <a href="#" class="go" v-on:click="update">Go</a>
+        <a href="#" v-on:click="displayDatepicker = false">Back</a>
+      </div>
     </div>
 
     <!--<div class="datepicker-container">
@@ -37,19 +47,51 @@
       return {
         hideCompleted: false,
         deadlineID: -1,
+        displayDatepicker: false,
+        displayEndDatepicker: false,
+        datepickerStartDate: null,
+        datepickerEndDate: null
       }
     },
     methods: {
-      update() {				
+      update() {	
+        // If "Custom..." chosen			
+        if (this.deadlineID == 4) {
+          // Reset dropdown
+          this.deadlineID = -1;
+
+          this.displayDatepicker = true;
+          return;
+        }
+
 				let filters = {};
 
 				if (this.hideCompleted) {
 					filters.hideCompleted = true;
 				}
 
-				if (this.deadlineID > -1) {
+        // If ids 0 - 3 are chosen, use precalculated dates
+				if (this.deadlineID > -1 && this.deadlineID <= 3) {
           filters.deadline = this._idToDateArray(this.deadlineID);
-          console.log(filters.deadline);
+        } 
+
+        // If function called when datepicker is displayed, use user-entered date
+        if (this.displayDatepicker && (this.datepickerStartDate || this.datepickerEndDate)) {
+          let dateRange = [];
+        
+          if (this.datepickerStartDate) {
+            dateRange.push(this.datepickerStartDate);
+          } else {
+            dateRange.push(false);
+          }
+
+          if (this.datepickerEndDate) {
+            dateRange.push(this.datepickerEndDate);
+          } else {
+            dateRange.push(false);
+          }
+
+          filters.deadline = dateRange;
         }
 
 				this.$emit("update", filters);
@@ -117,7 +159,7 @@
     font-size: small;
 	}
 
-  .select-container {
+  .deadline-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -135,8 +177,22 @@
     margin-top: .5rem;
   }
 
+  .datepickers {
+    display: flex;
+    flex-direction: column;
+  }
+
   .datepicker {
     color: black;
+  }
+
+  a {
+    color: white;
+    font-size: 1rem;
+  }
+
+  .go {
+    margin-right: .5rem;
   }
 
   .hide-completed-container {
@@ -151,7 +207,7 @@
       justify-content: center;
     }
 
-    .select-container {
+    .deadline-container {
       flex-direction: row;
       margin-top: 0rem;
       margin-left: 1rem;
@@ -164,11 +220,10 @@
     .datepicker-container {
       flex-direction: row;
       margin-top: 0rem;
-      margin-left: 1rem;
     }
 
     .datepicker {
-      margin-left: .5rem;
+      margin: 0rem .5rem;
     }
 
     .hide-completed-container {
