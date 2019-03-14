@@ -8,7 +8,7 @@ const connectMongoDB = require("./connect");
 const collection = "Users";
 
 router.post("/register", async (req, res) => {
-    const users = await connectMongoDB(collection);
+    const users = req.app.locals.userCollection;
 
     const result = await users.findOne({"username": req.body.username});
     

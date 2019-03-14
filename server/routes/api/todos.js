@@ -4,16 +4,13 @@ const express = require("express");
 const mongodb = require("mongodb");
 
 const router = express.Router();
-const connectMongoDB = require("./connect");
-// const updateDB = require("./update");
-const collection = "ToDos";
 
 // updateDB({});
 
 // MongoDB implementation
 // Get todos
 router.get("/", async (req, res) => {
-	const todoCollection = await connectMongoDB(collection);
+	const todoCollection = req.app.locals.todoCollection;
 
 	let filters = {"username": req.user.username}
 	const listParams = req.query;
@@ -63,7 +60,7 @@ router.get("/", async (req, res) => {
 
 // Add todo
 router.post("/", async (req, res) => {
-	const todoCollection = await connectMongoDB(collection);
+	const todoCollection = req.app.locals.todoCollection;
 
 	const data = {
 		"username": req.user.username,
@@ -82,7 +79,7 @@ router.post("/", async (req, res) => {
 
 // delete todo
 router.delete("/:id", async (req, res) => {
-	const todoCollection = await connectMongoDB(collection);
+	const todoCollection = req.app.locals.todoCollection;
 
 	await todoCollection.deleteOne({_id: new mongodb.ObjectID(req.params.id)});
 	res.status(200).send();
@@ -90,7 +87,7 @@ router.delete("/:id", async (req, res) => {
 
 // update todo
 router.put("/", async (req, res) => {
-	const todoCollection = await connectMongoDB(collection);
+	const todoCollection = req.app.locals.todoCollection;
 	
 	const deadline = new Date(req.body.deadline);
 	deadline.setHours(0, 0, 0, 0);

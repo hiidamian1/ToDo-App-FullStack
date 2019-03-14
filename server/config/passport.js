@@ -1,7 +1,7 @@
 const LocalStrategy = require("passport-local").Strategy;
 const mongodb = require("mongodb");
 const bcrypt = require("bcryptjs");
-const connectMongoDB = require("../routes/api/connect");
+const {connectMongoDB, client} = require("../routes/api/connect");
 const collection = "Users";
 
 module.exports = (passport) => {

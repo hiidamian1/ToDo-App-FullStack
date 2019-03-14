@@ -6,6 +6,8 @@ const cors = require("cors");
 const session = require("express-session");
 const passport = require("passport");
 
+const {connectMongoDB, client} = require("./routes/api/connect");
+
 const app = express();
 
 //passport config
@@ -22,6 +24,7 @@ app.use(session({
 	secret: "secret",
 	resave: true,
 	saveUninitialized: true
+	//store: new MongoStore({url: "mongodb+srv://hiidamian1:Cymadeagle1!@sideprojects-xmkod.mongodb.net/test?retryWrites=true"})
 }));
 
 app.use(passport.initialize());
@@ -33,6 +36,13 @@ const users = require("./routes/api/users");
 app.use("/api/todos", todos);
 app.use("/api/users", users);
 
+// Create connections to users and todos db
+connectMongoDB("Users").then((userCollection) => {
+	app.locals.userCollection = userCollection;
+});
+connectMongoDB("ToDos").then((todoCollection) => {
+	app.locals.todoCollection = todoCollection;
+});
 
 //handle production
 if (process.env.NODE_ENV == "production") {
@@ -46,3 +56,9 @@ if (process.env.NODE_ENV == "production") {
 const port = process.env.PORT || 5000;
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
+
+//close db connection on program end
+process.on('SIGINT', () => {
+  client.close();
+  process.exit();
+});
