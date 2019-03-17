@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <Header v-bind:username="this.$route.params.username"/>
+    <Header v-bind:username="todos[0].username"/>
     <Filters v-bind:dateFormat="dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
