@@ -1,12 +1,14 @@
 const mongodb = require("mongodb");
-let client;
+//let dbclient;
 
 async function connectMongoDB(collection){
-	client = await mongodb.MongoClient.connect(
+	const client = await mongodb.MongoClient.connect(
 		"mongodb+srv://hiidamian1:Cymadeagle1!@sideprojects-xmkod.mongodb.net/test?retryWrites=true", {
 			useNewUrlParser: true
-		});
-	return client.db("ToDoAppDB").collection(collection);
-}
+		}
+	);
+	//console.log(dbclient);
+	return {"collection": client.db("ToDoAppDB").collection(collection), "client": client};
+};
 
-module.exports = {"connectMongoDB": connectMongoDB, "client": client};
+module.exports = connectMongoDB;

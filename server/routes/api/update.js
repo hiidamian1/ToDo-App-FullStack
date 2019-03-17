@@ -1,5 +1,5 @@
 const mongodb = require("mongodb");
-const connectMongoDB = require("./connect");
+const {connectMongoDB, client} = require("./connect");
 const collection = "ToDos";
 
 async function updateDB(newValues) {
