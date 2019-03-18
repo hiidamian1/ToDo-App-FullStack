@@ -41,8 +41,6 @@ mongodb.MongoClient.connect(
 	app.locals.userCollection = client.db("ToDoAppDB").collection("Users");
 	app.locals.todoCollection = client.db("ToDoAppDB").collection("ToDos");
 
-	console.log(app.locals);
-
 	//these routes rely on app.locals
 	const todos = require("./routes/api/todos");
 	const users = require("./routes/api/users");
