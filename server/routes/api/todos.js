@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
 	}
 
 	if ("deadline" in listParams){
-		if (listParams.deadline.length == 1){
+		if (listParams.deadline.length == 1) {
 			startDate = new Date(listParams.deadline[0]);
 			startDate.setHours(0, 0, 0, 0);
 			
@@ -52,8 +52,8 @@ router.get("/", async (req, res) => {
 			}
 
 			filters.deadline = query;
-		}
-	}
+    }
+  }
 	
 	res.send(await todoCollection.find(filters).toArray());
 });
@@ -109,15 +109,12 @@ router.put("/", async (req, res) => {
 		});
 	return client.db("ToDoAppDB").collection(collection);
 }
-
 Couchbase implementation
 // Get todos
 router.get("/", (req, res) => {
 	const bucket = connectCB();
-
 	const N1qlQuery = couchbase.N1qlQuery;
 	const query = N1qlQuery.fromString("select meta().id as id, * from ToDoAppBucket");
-
 	bucket.query(query, (err, rows) => {
 		if (err) {
 			res.status(404).json({"error": err});
@@ -127,18 +124,14 @@ router.get("/", (req, res) => {
 			res.json(rows);
 		}
 	});
-
 });
-
 // Add todos
 router.post("/", (req, res) => {
 	const bucket = connectCB();
-
 	const data = {
 		"title": req.body.text,
 		"completed": false
 	}
-
 	bucket.insert(uuidv4(), data, (err, rows) => {
 		if (err) {
 			res.json(err);
@@ -146,15 +139,11 @@ router.post("/", (req, res) => {
 			res.json(rows);
 		}
 	})
-
 });
-
 //Delete todo
 router.delete("/:id", (req, res) => {
 	const bucket = connectCB();
-
 	const id = req.params.id;
-
 	bucket.remove(id, (err, rows) => {
 		if (err) {
 			res.json(err);
@@ -162,12 +151,9 @@ router.delete("/:id", (req, res) => {
 			res.json(rows);
 		}
 	})
-
 });
-
 function connectCB() {
 	const cluster = new couchbase.Cluster("127.0.0.1:8091");
-
 	const bucket = cluster.openBucket("ToDoAppBucket", "Cymadeagle1!", err => {
 		if (err){
 			throw err;
@@ -175,7 +161,6 @@ function connectCB() {
 			console.log("Success!");
 		}
 	})
-
 	return bucket;
 }*/
 
