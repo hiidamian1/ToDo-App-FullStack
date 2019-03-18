@@ -1,5 +1,4 @@
 const mongodb = require("mongodb");
-//let dbclient;
 
 async function connectMongoDB(collection){
 	const client = await mongodb.MongoClient.connect(
@@ -7,7 +6,6 @@ async function connectMongoDB(collection){
 			useNewUrlParser: true
 		}
 	);
-	//console.log(dbclient);
 	return {"collection": client.db("ToDoAppDB").collection(collection), "client": client};
 };
 

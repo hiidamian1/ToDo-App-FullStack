@@ -12,6 +12,8 @@ module.exports = (passport) => {
 
       client.close();
 
+      //console.log(`passport result: ${result}`);
+
       if (!result) {
         return done(null, false, {message: "email not registered"});
       }
@@ -30,6 +32,7 @@ module.exports = (passport) => {
   );
 
   passport.serializeUser( (user, done) => {
+    //console.log(`serialize user: ${user}`);
     done(null, user._id);
   });
 
@@ -38,8 +41,12 @@ module.exports = (passport) => {
       const {collection: users, client} = await connectMongoDB(collection);
       const result = await users.findOne({"_id": new mongodb.ObjectID(id)});    
       client.close();
+      
+      //console.log(`deserialize user: ${result}`);
+
       done(null, result);
     } catch (err) {
+      //console.log("deserialize user error");
       done(err, false);
     } 
   })
