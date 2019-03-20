@@ -33,7 +33,7 @@ router.get("/logout", (req, res) => {
   res.status(200).send();
 });
 
-router.get("/authenticate", auth, (req, res) => {
+router.post("/authenticate", auth, (req, res) => {
   console.log("authenticating");
   res.status(200).send();
 });
