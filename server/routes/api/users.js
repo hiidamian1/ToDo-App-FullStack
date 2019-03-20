@@ -33,9 +33,9 @@ router.get("/logout", (req, res) => {
   res.status(200).send();
 });
 
-router.get("/authenticae", auth, (req, res) => {
+router.get("/authenticate", auth, (req, res) => {
   console.log("authenticating");
-  res.status(405).send();
+  res.status(200).send();
 });
 
 module.exports = router;
