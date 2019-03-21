@@ -5,7 +5,8 @@ const mongodb = require("mongodb");
 
 const router = express.Router();
 
-// updateDB({});
+//const updateDB = require("./update");
+//updateDB({});
 
 // MongoDB implementation
 // Get todos
@@ -22,16 +23,18 @@ router.get("/", async (req, res) => {
 	if ("deadline" in listParams){
 		if (listParams.deadline.length == 1) {
 			startDate = new Date(listParams.deadline[0]);
-			startDate.setHours(0, 0, 0, 0);
+			startDate.setUTCHours(0, 0, 0, 0);
 			
 			endDate = new Date();
-			endDate.setDate(startDate.getDate() + 1);
-			endDate.setHours(0, 0, 0, 0);
+			endDate.setDate(startDate.getUTCDate() + 1);
+			endDate.setUTCHours(0, 0, 0, 0);
 
 			const query = {
 				"$gte": startDate, 
 				"$lt": endDate
 			};
+			
+			console.log(query);
 
 			filters.deadline = query;
 		} else {
@@ -39,14 +42,14 @@ router.get("/", async (req, res) => {
 
 			if (listParams.deadline[0]) {
 				startDate = new Date(listParams.deadline[0]);
-				startDate.setHours(0, 0, 0, 0);
+				startDate.setUTCHours(0, 0, 0, 0);
 
 				query.$gte = startDate;
 			}
 			
 			if (listParams.deadline[1]) {
 				endDate = new Date(listParams.deadline[1]);
-				endDate.setHours(0, 0, 0, 0);
+				endDate.setUTCHours(0, 0, 0, 0);
 
 				query.$lte = endDate;
 			}
@@ -55,7 +58,13 @@ router.get("/", async (req, res) => {
     }
   }
 	
-	res.send(await todoCollection.find(filters).toArray());
+	const todos = await todoCollection.find(filters).toArray();
+
+	for (let i = 0; i < todos.length; i++) {
+		todos[i].deadline.setHours(0, 0, 0, 0);
+		todos[i].deadline.setDate(todos[i].deadline.getDate() + 1);
+	}
+	res.send(todos);
 });
 
 // Add todo
@@ -69,7 +78,7 @@ router.post("/", async (req, res) => {
 		"deadline": new Date()
 	}
 
-	data.deadline.setHours(0, 0, 0, 0);
+	data.deadline.setUTCHours(0, 0, 0, 0);
 
 	await todoCollection.insertOne(data);
 
@@ -90,8 +99,9 @@ router.put("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
 	
 	const deadline = new Date(req.body.deadline);
-	deadline.setHours(0, 0, 0, 0);
-
+	deadline.setUTCHours(0, 0, 0, 0);
+	console.log(`deadline, todos.js ${deadline}`);
+	
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {
 			"completed": req.body.completed,
