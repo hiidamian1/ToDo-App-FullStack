@@ -29,6 +29,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Create connections to users and todos db
+//const connectMongoDB = require("../routes/api/connect");
+
 let mongoClient;
 
 mongodb.MongoClient.connect(
@@ -47,24 +49,24 @@ mongodb.MongoClient.connect(
 
 	app.use("/api/todos", todos);
 	app.use("/api/users", users);
+
+	//handle production
+	if (process.env.NODE_ENV == "production") {
+		//static folder
+		app.use(express.static(__dirname + "/public"));
+
+		//handle single page application
+		app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
+	}
+
+	//close db connection on program end
+	process.on("SIGINT", () => {
+		console.log("closing");
+		mongoClient.close();
+		process.exit();
+	});
+
+	const port = process.env.PORT || 5000;
+
+	app.listen(port, () => console.log(`Server started on port ${port}`));
 });
-
-//handle production
-if (process.env.NODE_ENV == "production") {
-	//static folder
-	app.use(express.static(__dirname + "/public"));
-
-	//handle single page application
-	app.get(/.*/, (req, res) => res.sendFile(__dirname + "/public/index.html"));
-}
-
-//close db connection on program end
-process.on("SIGINT", () => {
-	console.log("closing");
-  mongoClient.close();
-  process.exit();
-});
-
-const port = process.env.PORT || 5000;
-
-app.listen(port, () => console.log(`Server started on port ${port}`));
