@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 			const query = {
 				"$gte": startDate, 
 				"$lt": endDate
-			}
+			};
 
 			filters.deadline = query;
 		} else {

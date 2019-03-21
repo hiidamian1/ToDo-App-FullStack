@@ -29,7 +29,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Create connections to users and todos db
-//const connectMongoDB = require("../routes/api/connect");
 
 let mongoClient;
 

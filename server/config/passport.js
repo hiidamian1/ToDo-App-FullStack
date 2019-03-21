@@ -12,8 +12,6 @@ module.exports = (passport) => {
 
       client.close();
 
-      //console.log(`passport result: ${result}`);
-
       if (!result) {
         return done(null, false, {message: "email not registered"});
       }
@@ -42,11 +40,8 @@ module.exports = (passport) => {
       const result = await users.findOne({"_id": new mongodb.ObjectID(id)});    
       client.close();
       
-      //console.log(`deserialize user: ${result}`);
-
       done(null, result);
     } catch (err) {
-      //console.log("deserialize user error");
       done(err, false);
     } 
   })
