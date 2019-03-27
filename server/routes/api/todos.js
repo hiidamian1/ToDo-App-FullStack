@@ -33,8 +33,8 @@ router.get("/", async (req, res) => {
 				"$gte": startDate, 
 				"$lt": endDate
 			};
-			
-			console.log(query);
+
+			//console.log(query);
 
 			filters.deadline = query;
 		} else {
@@ -60,10 +60,10 @@ router.get("/", async (req, res) => {
 	
 	const todos = await todoCollection.find(filters).toArray();
 
-	for (let i = 0; i < todos.length; i++) {
+	/*for (let i = 0; i < todos.length; i++) {
 		todos[i].deadline.setHours(0, 0, 0, 0);
 		todos[i].deadline.setDate(todos[i].deadline.getDate() + 1);
-	}
+	}*/
 	res.send(todos);
 });
 
@@ -77,8 +77,6 @@ router.post("/", async (req, res) => {
 		"completed": false,
 		"deadline": new Date()
 	}
-
-	data.deadline.setUTCHours(0, 0, 0, 0);
 
 	await todoCollection.insertOne(data);
 
@@ -99,8 +97,6 @@ router.put("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
 	
 	const deadline = new Date(req.body.deadline);
-	deadline.setUTCHours(0, 0, 0, 0);
-	console.log(`deadline, todos.js ${deadline}`);
 	
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {

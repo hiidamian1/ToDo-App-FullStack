@@ -10,8 +10,8 @@ async function updateDB(newValues) {
   for (let i = 0; i < entries.length; i++) {
     if (entries[i].deadline && entries[i].username == "damianhii") {
       console.log(`updating ${entries[i]._id}`);
-      const newUTCDate = new Date(entries[i].deadline);
-      newUTCDate.setUTCHours(0, 0, 0, 0);
+      const newUTCDate = new Date(entries[i].deadline).toUTCString());
+      //newUTCDate.setUTCHours(0, 0, 0, 0);
 
       await todoCollection.updateOne({"_id": new mongodb.ObjectID(entries[i]._id)}, {$set: {
         "deadline": newUTCDate
