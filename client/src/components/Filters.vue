@@ -96,20 +96,14 @@
 
 				this.$emit("update", filters);
       },
-      _disabledDate() {
-				let date = new Date();
-
-				date.setDate(date.getDate() - 1);
-				
-				return date;
-      },
       _idToDateArray(id) {
         if (id <= 1) {
           let date = new Date();
-
           if (id == 1) {
             date.setDate(date.getDate() + 1);
           }
+
+          date.setHours(0, 0, 0, 0);
 
           return [date];
         } else if (id <= 3) {
@@ -123,26 +117,13 @@
             endDate.setDate(endDate.getDate() + 7 + (6 - endDate.getDay()));
           }
 
+          startDate.setHours(0, 0, 0, 0);
+          endDate.setHours(0, 0, 0, 0);
+
           return [startDate, endDate];
         } else {
           throw ("error! invalid text to date input");
         }
-
-        /*if (id <= 1){
-          if (id == 0) {
-            return date;
-          } else if (id == 1) {
-            date.setDate(date.getDate() + 1);
-          } 
-        } else if (id <= 3) {
-          date.setDate(date.getDate() + (6 - date.getDay()));
-        } else if (id == 3) {
-          date.setDate(date.getDate() + 7 + (6 - date.getDay()));
-        } else {
-          throw ("error! invalid text to date input");
-        }
-        
-        return date;*/
       }
     }
   }

@@ -23,7 +23,8 @@
 			addTodo(e) {
 				e.preventDefault();
 				const newTodo = {
-					title: this.title,					
+					title: this.title,
+					deadline: new Date()					
 				}
 				this.$emit("add-todo", newTodo);
 				this.title = ""; //clear form

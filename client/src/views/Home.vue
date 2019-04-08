@@ -1,6 +1,6 @@
 <template>
   <div class="root">
-    <Header v-bind:username="todos[0].username"/>
+    <Header v-bind:username="this.$route.params.username"/>
     <Filters v-bind:dateFormat="dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
@@ -51,7 +51,7 @@ export default {
     async updateTodo(update) {
       try {
         await PostService.updateTodo(update.id, update.completed, update.deadline);
-        this.todos = await PostService.getTodos(this.filters); 
+        this.todos = await PostService.getTodos(this.filters);
       } catch(err) {
         this.error = err.message
       }

@@ -22,24 +22,15 @@ router.get("/", async (req, res) => {
 4
 	if ("deadline" in listParams){
 		if (listParams.deadline.length == 1) {
-			//console.log(listParams.deadline[0]);
 			startDate = new Date(listParams.deadline[0]);
-			//startDate.setTime(startDate.getTime() - startDate.getTimezoneOffset() * 60000);
-			//startDate.setUTCHours(0, 0, 0, 0);
-			//console.log(startDate);
 
 			endDate = new Date();
 			endDate.setTime(startDate.getTime() + 24 * 3600000);
-			//endDate.setHours(0, 0, 0, 0);
-
-			//NEED TO ZERO OUT SECONDS, NOT ELIMINATE ALL TIME
 
 			const query = {
 				"$gte": startDate, 
 				"$lt": endDate
 			};
-
-			console.log(query);
 
 			filters.deadline = query;
 		} else {
@@ -47,19 +38,15 @@ router.get("/", async (req, res) => {
 
 			if (listParams.deadline[0]) {
 				startDate = new Date(listParams.deadline[0]);
-				//startDate.setTime(startDate.getTime() - startDate.getTimezoneOffset() * 60000);
 
 				query.$gte = startDate;
 			}
 			
 			if (listParams.deadline[1]) {
 				endDate = new Date(listParams.deadline[1]);
-				//endDate.setTime(endDate.getTime() - endDate.getTimezoneOffset() * 60000);
 
 				query.$lte = endDate;
 			}
-
-			console.log(query);
 
 			filters.deadline = query;
     }
@@ -67,10 +54,6 @@ router.get("/", async (req, res) => {
 	
 	const todos = await todoCollection.find(filters).toArray();
 
-	/*for (let i = 0; i < todos.length; i++) {
-		todos[i].deadline.setHours(0, 0, 0, 0);
-		todos[i].deadline.setDate(todos[i].deadline.getDate() + 1);
-	}*/
 	res.send(todos);
 });
 
@@ -102,8 +85,6 @@ router.delete("/:id", async (req, res) => {
 // update todo
 router.put("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
-	//console.log(`update ${req.body.deadline}`);
-	//console.log(`update ${new Date(req.body.deadline)}`);
 
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
 		$set: {

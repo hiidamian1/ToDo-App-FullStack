@@ -21,7 +21,8 @@ class PostService {
 	// Create todo
 	static addTodo(text) {
 		return axios.post(url, {
-			text
+			text,
+			deadline
 		});
 	}
 
