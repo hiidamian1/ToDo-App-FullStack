@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header/>
     <div class="register-box">
       <h3>Register</h3>
       <div class="error" v-if="error.length">
@@ -24,13 +23,9 @@
 
 <script>
   import UserService from "../UserService.js";
-  import Header from "../components/Header";
 
   export default {
     name: "Register",
-    components: {
-      Header
-    },
     data() {
       return {
         username: "",

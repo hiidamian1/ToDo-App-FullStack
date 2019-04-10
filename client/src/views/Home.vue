@@ -1,6 +1,5 @@
 <template>
   <div class="root">
-    <Header v-bind:username="this.$route.params.username"/>
     <Filters v-bind:dateFormat="dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
@@ -11,7 +10,6 @@
 
 <script>
 import TodoList from "../components/Todos";
-import Header from "../components/Header.vue";
 import Filters from "../components/Filters.vue";
 import TodoInput from "../components/TodoInput.vue";
 import PostService from "../PostService.js";
@@ -21,7 +19,6 @@ export default {
   components: {
     TodoList, 
     TodoInput,
-    Header,
     Filters
   },
   data() {

@@ -2,7 +2,7 @@
 	<header class="header">
 		<h1>To Do List</h1>
 		<div class="logout">
-			<a href="#" v-if="loggedIn" v-on:click="logout">
+			<a href="#" v-if="displayLogout" v-on:click="logout">
 				Logout {{username}}
 			</a>
 		</div>
@@ -14,14 +14,12 @@
 
 	export default {
 		name: "Header",
-		props: [
-			"username"
-		],
 		data() {
 			return {
-				loggedIn: false,
+				displayLogout: false,
 				hideCompleted: false,
-				deadline: null
+				deadline: null,
+				username: ""
 			}
 		},
 		methods: {
@@ -50,19 +48,22 @@
 				e.preventDefault();
 				try {
 					await UserService.logoutUser();
-					this.loggedIn = false;
+					this.displayLogout = false;
+					localStorage.removeItem("username");
+					this.username = "";
 					this.$router.push("/login");
 				} catch(err) {
 					throw(err);
 				}
 			}
 		},
-		async created() {
-			try {
-				await UserService.authenticateUser(); 
-				this.loggedIn = true;
-			} catch(err) {
-				throw(err);
+		watch: {
+			"$route" () {
+				const user = localStorage.getItem("username");
+				if (user) {
+					this.displayLogout = true;
+					this.username = user;
+				}
 			}
 		}
 	}

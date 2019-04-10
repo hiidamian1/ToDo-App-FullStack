@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header/>
     <div class="login-box">
       <h3>Login</h3>
       <div class="error" v-if="error.length">
@@ -23,13 +22,9 @@
 
 <script>
   import UserService from "../UserService.js";
-  import Header from "../components/Header";
 
   export default {
     name: "Login",
-    components: {
-      Header
-    },
     data() {
       return {
         username: "",
@@ -41,8 +36,9 @@
       async login(e) {
         try {
           e.preventDefault();
-          const response = await UserService.verifyUser(this.username, this.password);
-          this.$router.push({name: "home", params: {"username": response.data}});
+          await UserService.verifyUser(this.username, this.password);
+          localStorage.setItem("username", this.username);
+          this.$router.push({name: "home"});
         } catch(err) {
           this.error = "Username and Password mismatch, or username unregistered. Please try again.";
         }

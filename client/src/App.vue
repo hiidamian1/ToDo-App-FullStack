@@ -1,12 +1,18 @@
 <template>
   <div id="app">
+    <Header/>
     <router-view/>
   </div>
 </template>
 
 <script>
+  import Header from "./components/Header";
+
   export default {
-    name: "app"
+    name: "app",
+    components: {
+      Header
+    }
   }
 </script>
 
@@ -21,11 +27,4 @@
   html {
     font-size: 62.5%;
   }
-
-  /*#app {
-    width: 80%;
-    margin: 5rem auto;
-    border: .5rem black solid;
-    border-radius: 1rem;
-  }*/
 </style>
