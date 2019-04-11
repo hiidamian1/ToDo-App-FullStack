@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
 	if ("hideCompleted" in listParams && listParams.hideCompleted){
 		filters.completed = false;
 	}
-4
+
 	if ("deadline" in listParams){
 		if (listParams.deadline.length == 1) {
 			startDate = new Date(listParams.deadline[0]);
@@ -60,7 +60,7 @@ router.get("/", async (req, res) => {
 // Add todo
 router.post("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
-
+	
 	const data = {
 		"username": req.user.username,
 		"title": req.body.text,
