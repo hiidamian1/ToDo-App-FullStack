@@ -31,7 +31,7 @@ export default {
   methods: {
     async addTodo(newTodo) {
       try {
-        await PostService.addTodo(newTodo.title);
+        await PostService.addTodo(newTodo.title, newTodo.deadline);
         this.todos = await PostService.getTodos(this.filters);
       } catch(err) {
         this.error = err.message;
