@@ -3,7 +3,7 @@
     <Filters v-bind:dateFormat="dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
-      <TodoList v-bind:todos="todos" v-bind:dateFormat="dateFormat" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
+      <TodoList v-bind:todos="displayedTodos" v-bind:dateFormat="dateFormat" v-on:delete-todo="deleteTodo" v-on:update-todo="updateTodo"/>
     </div>
   </div>
 </template>
@@ -24,6 +24,7 @@ export default {
   data() {
     return {
       todos: [],
+      displayedTodos: [],
       filters: {},
       dateFormat: "D dsu MMM yyyy"
     };
@@ -31,8 +32,10 @@ export default {
   methods: {
     async addTodo(newTodo) {
       try {
-        await PostService.addTodo(newTodo.title, newTodo.deadline);
-        this.todos = await PostService.getTodos(this.filters);
+        const response = await PostService.addTodo(newTodo.title, newTodo.deadline);
+        this.todos.push(response.data);
+        this.displayedTodos.push(response.data); 
+        //await PostService.getTodos(this.filters);
       } catch(err) {
         this.error = err.message;
       }
@@ -40,7 +43,8 @@ export default {
     async deleteTodo(todoId) {
       try {
         await PostService.deleteTodo(todoId.id);
-        this.todos = await PostService.getTodos(this.filters);
+        this.todos = this.todos.filter(todo => todo._id != todoId.id);
+        this.displayedTodos = this.todos;
       } catch(err) {
         this.error = err.message;
       }
@@ -48,23 +52,101 @@ export default {
     async updateTodo(update) {
       try {
         await PostService.updateTodo(update.id, update.completed, update.deadline);
-        this.todos = await PostService.getTodos(this.filters);
+    
+        for (let todo of this.todos) {
+          if (todo._id == update.id) {
+            todo.completed = update.completed; 
+            todo.deadline = update.deadline;
+            break;
+          }
+        }
+
+        for (let todo of this.displayedTodos) {
+          if (todo._id == update.id) {
+            todo.completed = update.completed; 
+            todo.deadline = update.deadline;
+            return;
+          }
+        }
       } catch(err) {
         this.error = err.message
       }
     },
-    async updateTodoList(listParams) {
+    async updateTodoList(filters) {
       try {
-        this.filters = listParams;
-        this.todos = await PostService.getTodos(this.filters);
+        this.filters = filters; //might not need anymore
+        //this.todos = await PostService.getTodos(this.filters);
+        this.displayedTodos = this.todos;
+        if (filters.hideCompleted || filters.deadline) {
+          this.displayedTodos = this.displayedTodos.filter(todo => this._applyFilters(todo, filters));
+        }
+
+        if (filters.byDate) {
+          if (filters.ascending) {
+            this.displayedTodos.sort((todo1, todo2) => {
+              return todo1.deadline - todo2.deadline;
+            })
+          } 
+
+          if (filters.descending) {
+            this.displayedTodos.sort((todo1, todo2) => {
+              return todo2.deadline - todo1.deadline;
+            })
+          }
+        } else {
+          if (filters.ascending) {
+            this.displayedTodos.sort();
+          } 
+
+          if (filters.descending) {
+            this.displayedTodos.sort().reverse();
+          }
+        }
       } catch (err) {
         this.error = err.message;
+      }
+    },
+    _applyFilters(todo, filters) {    
+      //see if todo is completed or not  
+      if (filters.hideCompleted) {
+        if (todo.completed) {
+          return false;
+        }
+      }
+
+      //see if todo deadline falls within date range
+      if (filters.deadline) {
+        let startDate;
+        let endDate;
+        const todoDeadline = new Date(todo.deadline);
+
+        if (filters.deadline.length == 1) {
+          startDate = filters.deadline[0];
+
+          endDate = new Date();
+          endDate.setTime(startDate.getTime() + 24 * 3600000); 
+
+          if (todoDeadline < startDate || todoDeadline >= endDate) {
+            return false;
+          }
+        } else {
+          startDate = filters.deadline[0];
+          endDate = filters.deadline[1];
+
+          if (todoDeadline < startDate || todoDeadline > endDate) {
+            return false;
+          }
+        }
+
+        //if all tests pass, display the todo
+        return true
       }
     }
   },
   async created() {
     try {
-      this.todos = await PostService.getTodos(this.filters);
+      this.todos = await PostService.getTodos();
+      this.displayedTodos = this.todos;
     } catch(err) {
       this.error = err.message;
     }

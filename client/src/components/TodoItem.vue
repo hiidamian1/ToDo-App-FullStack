@@ -99,7 +99,8 @@
 		},
 		created() {
 			const itemDate = new Date(this.item.deadline);
-			const currentDate = this._exclusiveCurrentDate();
+			const currentDate = new Date();
+			currentDate.setHours(0, 0, 0, 0);
 
 			if (itemDate < currentDate && !this.item.completed) {
 				this.state.overdue = true;
