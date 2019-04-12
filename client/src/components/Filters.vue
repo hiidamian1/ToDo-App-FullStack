@@ -103,7 +103,12 @@
           }
 
           if (this.datepickerEndDate) {
-            dateRange.push(this.datepickerEndDate);
+            //console.log(this.datepickerEndDate);
+            const endDate = new Date(this.datepickerEndDate);
+            endDate.setTime(endDate.getTime() + 24 * 3600000); 
+            endDate.setHours(0, 0, 0, 0);
+            //console.log(endDate);
+            dateRange.push(endDate);
           } else {
             dateRange.push(false);
           }
@@ -148,10 +153,10 @@
           let endDate = new Date();
 
           if (id == 2) {
-            endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+            endDate.setDate(endDate.getDate() + (7 - endDate.getDay()));
           } else {
             startDate.setDate(startDate.getDate() + 7 - startDate.getDay());
-            endDate.setDate(endDate.getDate() + 7 + (6 - endDate.getDay()));
+            endDate.setDate(endDate.getDate() + 7 + (7 - endDate.getDay()));
           }
 
           startDate.setHours(0, 0, 0, 0);

@@ -76,8 +76,9 @@ export default {
       try {
         this.filters = filters; //might not need anymore
         //this.todos = await PostService.getTodos(this.filters);
-        this.displayedTodos = this.todos;
+        this.displayedTodos = this.todos; //to "reset" list that gets displayed before being trimmed down
         if (filters.hideCompleted || filters.deadline) {
+          //console.log(filters.deadline);
           this.displayedTodos = this.displayedTodos.filter(todo => this._applyFilters(todo, filters));
         }
 
@@ -120,27 +121,38 @@ export default {
         let endDate;
         const todoDeadline = new Date(todo.deadline);
 
+        console.log(todoDeadline);
+        console.log(filters.deadline);
         if (filters.deadline.length == 1) {
           startDate = filters.deadline[0];
-
+          //console.log(startDate);
           endDate = new Date();
           endDate.setTime(startDate.getTime() + 24 * 3600000); 
 
-          if (todoDeadline < startDate || todoDeadline >= endDate) {
+          /*if (todoDeadline < startDate || todoDeadline >= endDate) {
+            //console.log(`TRIGGERED. DEADLINE ${todoDeadline} STARTDATE ${startDate} ENDDATE ${endDate}`);
             return false;
-          }
+          }*/
         } else {
           startDate = filters.deadline[0];
           endDate = filters.deadline[1];
-
-          if (todoDeadline < startDate || todoDeadline > endDate) {
-            return false;
-          }
         }
 
-        //if all tests pass, display the todo
-        return true
+        if (startDate && endDate) {
+          return todoDeadline >= startDate && todoDeadline < endDate;
+        } else if (startDate) {
+          return todoDeadline >= startDate;
+        } else {
+          return todoDeadline < endDate;
+        }
+
+        /*if (todoDeadline < startDate || todoDeadline >= endDate) {
+          console.log(`TRIGGERED. DEADLINE ${todoDeadline} STARTDATE ${startDate} ENDDATE ${endDate}`);
+          return false;
+        }*/
       }
+      //if all tests pass, display the todo
+      return true;
     }
   },
   async created() {
