@@ -25,7 +25,6 @@ export default {
     return {
       todos: [],
       displayedTodos: [],
-      filters: {},
       dateFormat: "D dsu MMM yyyy"
     };
   },
@@ -35,7 +34,6 @@ export default {
         const response = await PostService.addTodo(newTodo.title, newTodo.deadline);
         this.todos.push(response.data);
         this.displayedTodos.push(response.data); 
-        //await PostService.getTodos(this.filters);
       } catch(err) {
         this.error = err.message;
       }
@@ -44,7 +42,7 @@ export default {
       try {
         await PostService.deleteTodo(todoId.id);
         this.todos = this.todos.filter(todo => todo._id != todoId.id);
-        this.displayedTodos = this.todos;
+        this.displayedTodos = this.displayedTodos.filter(todo => todo._id != todoId.id);
       } catch(err) {
         this.error = err.message;
       }
@@ -74,33 +72,35 @@ export default {
     },
     async updateTodoList(filters) {
       try {
-        this.filters = filters; //might not need anymore
-        //this.todos = await PostService.getTodos(this.filters);
-        this.displayedTodos = this.todos; //to "reset" list that gets displayed before being trimmed down
+        this.displayedTodos = this.todos.slice(); //"resets" list that gets displayed before being trimmed down
         if (filters.hideCompleted || filters.deadline) {
-          //console.log(filters.deadline);
           this.displayedTodos = this.displayedTodos.filter(todo => this._applyFilters(todo, filters));
         }
 
         if (filters.byDate) {
           if (filters.ascending) {
             this.displayedTodos.sort((todo1, todo2) => {
-              return todo1.deadline - todo2.deadline;
+              return new Date(todo1.deadline) - new Date(todo2.deadline);
             })
           } 
 
           if (filters.descending) {
             this.displayedTodos.sort((todo1, todo2) => {
-              return todo2.deadline - todo1.deadline;
+              return new Date(todo2.deadline) - new Date(todo1.deadline);
             })
           }
-        } else {
+        } 
+        if (filters.byAlphabetical) {
           if (filters.ascending) {
-            this.displayedTodos.sort();
+            this.displayedTodos.sort((todo1, todo2) => {
+              return (todo1.title.toUpperCase() < todo2.title.toUpperCase()) ? -1 : (todo1.title.toUpperCase() > todo2.title.toUpperCase()) ? 1 : 0;
+            });
           } 
 
           if (filters.descending) {
-            this.displayedTodos.sort().reverse();
+            this.displayedTodos.sort((todo1, todo2) => {
+              return (todo1.title.toUpperCase() > todo2.title.toUpperCase()) ? -1 : (todo1.title.toUpperCase() < todo2.title.toUpperCase()) ? 1 : 0;
+            });
           }
         }
       } catch (err) {
@@ -121,18 +121,10 @@ export default {
         let endDate;
         const todoDeadline = new Date(todo.deadline);
 
-        console.log(todoDeadline);
-        console.log(filters.deadline);
         if (filters.deadline.length == 1) {
           startDate = filters.deadline[0];
-          //console.log(startDate);
           endDate = new Date();
           endDate.setTime(startDate.getTime() + 24 * 3600000); 
-
-          /*if (todoDeadline < startDate || todoDeadline >= endDate) {
-            //console.log(`TRIGGERED. DEADLINE ${todoDeadline} STARTDATE ${startDate} ENDDATE ${endDate}`);
-            return false;
-          }*/
         } else {
           startDate = filters.deadline[0];
           endDate = filters.deadline[1];
@@ -145,11 +137,6 @@ export default {
         } else {
           return todoDeadline < endDate;
         }
-
-        /*if (todoDeadline < startDate || todoDeadline >= endDate) {
-          console.log(`TRIGGERED. DEADLINE ${todoDeadline} STARTDATE ${startDate} ENDDATE ${endDate}`);
-          return false;
-        }*/
       }
       //if all tests pass, display the todo
       return true;
@@ -158,7 +145,7 @@ export default {
   async created() {
     try {
       this.todos = await PostService.getTodos();
-      this.displayedTodos = this.todos;
+      this.displayedTodos = this.todos.slice(); // makes copy of this.todos
     } catch(err) {
       this.error = err.message;
     }

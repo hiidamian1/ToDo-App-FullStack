@@ -92,8 +92,8 @@
 			},
 			_exclusiveCurrentDate() {
 				let date = new Date();
-				date.setDate(date.getDate() - 1);
-
+				date.setTime(date.getTime() - 24 * 3600000);
+				
 				return date;
 			}
 		},
