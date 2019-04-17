@@ -1,10 +1,20 @@
 <template>
 	<header class="header">
+		<div id="hidden" class="user-options-button" v-if="displayLogout">
+			<i class="fas fa-user"></i> 
+			{{username}}
+		</div>
 		<h1>To Do List</h1>
-		<div class="logout">
-			<a href="#" v-if="displayLogout" v-on:click="logout">
-				Logout {{username}}
-			</a>
+		<div class="user-options-dropdown" v-if="displayLogout">
+			<button class="user-options-button" v-on:click="displayDropdown = !displayDropdown">
+				<i class="fas fa-user"></i> 
+				{{username}}
+			</button>
+			<div class="user-options" v-if="displayDropdown">
+				<a href="#" v-on:click="logout">
+					Logout
+				</a>
+			</div>
 		</div>
 	</header>
 </template>
@@ -17,6 +27,7 @@
 		data() {
 			return {
 				displayLogout: false,
+				displayDropdown: false,
 				hideCompleted: false,
 				deadline: null,
 				username: ""
@@ -49,6 +60,7 @@
 				try {
 					await UserService.logoutUser();
 					this.displayLogout = false;
+					this.displayDropdown = false;
 					localStorage.removeItem("username");
 					this.username = "";
 					this.$router.push("/login");
@@ -71,6 +83,7 @@
 
 <style scoped>
 	.header {
+		display: flex;
 		background: #333;
 		color: #fff;
 		padding: 1rem;
@@ -80,16 +93,50 @@
 
 	h1 {
 		font-size: 2.4rem;
+		flex: 1;
 	}
+
+	.user-options-dropdown {
+		position: relative;
+		display: inline-block;
+	}
+
+	.user-options-button {
+		font-size: 1.2rem;
+		border: .1rem solid white;
+		padding: .5rem;
+		background: none;
+		color: white;
+		cursor: pointer;
+	}
+
+	.user-options-button:hover {
+		opacity: .5;
+	}
+
+	.user-options {
+		position: absolute;
+		background-color: white;
+		padding: .5rem;
+		width: 100%;
+		z-index: 1;
+	}
+
 
 	a {
 		text-decoration: none;
 		color: #fff;
 	}
 
-	.logout {
-		margin-top: .5rem;
-		font-size: 1.2rem;
+	a:hover {
+		opacity: 0.5;
 	}
 
+	.user-options a {
+		color: black;
+	}
+
+	#hidden {
+		visibility: hidden;
+	}
 </style>

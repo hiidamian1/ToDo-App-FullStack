@@ -79,8 +79,6 @@
 					this.state.overdueComplete = false;
 				}
 
-				//console.log(update);
-
 				this.$emit("update-todo", update);
 			},
 			deleteTodo(e) {
@@ -94,7 +92,7 @@
 			},
 			_exclusiveCurrentDate() {
 				let date = new Date();
-				date.setTime(date.getTime() - 24 * 3600000);
+				date.setHours(0, 0, 0, 0);
 				
 				return date;
 			}
@@ -109,7 +107,6 @@
 			}
 
 			if (itemDate < currentDate && this.item.completed) {
-				//console.log(`TODO: ${this.item.title}`);
 				this.state.overdueComplete = true;
 			}
 		}

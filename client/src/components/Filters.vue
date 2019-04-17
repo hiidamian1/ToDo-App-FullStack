@@ -103,11 +103,9 @@
           }
 
           if (this.datepickerEndDate) {
-            //console.log(this.datepickerEndDate);
             const endDate = new Date(this.datepickerEndDate);
             endDate.setTime(endDate.getTime() + 24 * 3600000); 
             endDate.setHours(0, 0, 0, 0);
-            //console.log(endDate);
             dateRange.push(endDate);
           } else {
             dateRange.push(false);
