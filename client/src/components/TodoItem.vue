@@ -73,11 +73,13 @@
 
 				if (!this.item.completed && this.state.overdue) {
 					this.state.overdue = false;
-					this.overdueComplete = true;
-				} else if (this.overdueComplete) {
+					this.state.overdueComplete = true;
+				} else if (this.state.overdueComplete) {
 					this.state.overdue = true;
-					this.overdueComplete = false;
+					this.state.overdueComplete = false;
 				}
+
+				//console.log(update);
 
 				this.$emit("update-todo", update);
 			},
@@ -104,6 +106,11 @@
 
 			if (itemDate < currentDate && !this.item.completed) {
 				this.state.overdue = true;
+			}
+
+			if (itemDate < currentDate && this.item.completed) {
+				//console.log(`TODO: ${this.item.title}`);
+				this.state.overdueComplete = true;
 			}
 		}
 	}
