@@ -53,6 +53,9 @@ router.get("/", async (req, res) => {
   }
 	
 	const todos = await todoCollection.find(filters).toArray();
+	/*todos.sort((todo1, todo2) => {
+		return todo1.deadline - todo2.deadline;
+	});*/
 
 	res.send(todos);
 });
@@ -68,9 +71,9 @@ router.post("/", async (req, res) => {
 		"deadline": new Date(req.body.deadline)
 	}
 
-	await todoCollection.insertOne(data);
-
-	res.status(201).send();
+	const response = await todoCollection.insertOne(data);
+	//console.log(response.ops);
+	res.status(201).send(response.ops[0]);
 
 });
 

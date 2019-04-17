@@ -73,10 +73,10 @@
 
 				if (!this.item.completed && this.state.overdue) {
 					this.state.overdue = false;
-					this.overdueComplete = true;
-				} else if (this.overdueComplete) {
+					this.state.overdueComplete = true;
+				} else if (this.state.overdueComplete) {
 					this.state.overdue = true;
-					this.overdueComplete = false;
+					this.state.overdueComplete = false;
 				}
 
 				this.$emit("update-todo", update);
@@ -92,17 +92,22 @@
 			},
 			_exclusiveCurrentDate() {
 				let date = new Date();
-				date.setDate(date.getDate() - 1);
-
+				date.setHours(0, 0, 0, 0);
+				
 				return date;
 			}
 		},
 		created() {
 			const itemDate = new Date(this.item.deadline);
-			const currentDate = this._exclusiveCurrentDate();
+			const currentDate = new Date();
+			currentDate.setHours(0, 0, 0, 0);
 
 			if (itemDate < currentDate && !this.item.completed) {
 				this.state.overdue = true;
+			}
+
+			if (itemDate < currentDate && this.item.completed) {
+				this.state.overdueComplete = true;
 			}
 		}
 	}
