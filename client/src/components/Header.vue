@@ -11,7 +11,10 @@
 				{{username}}
 			</button>
 			<div class="user-options" v-if="displayDropdown">
-				<a href="#" v-on:click="logout">
+				<router-link to="/profile">
+					View Profile
+				</router-link>
+				<a href="#" class="option" v-on:click="logout">
 					Logout
 				</a>
 			</div>
@@ -122,6 +125,9 @@
 		z-index: 1;
 	}
 
+	.user-option {
+		border-bottom: .1rem solid #555;
+	}
 
 	a {
 		text-decoration: none;

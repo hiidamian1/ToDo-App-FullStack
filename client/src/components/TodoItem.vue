@@ -6,19 +6,19 @@
 		</div>-->
 		<div class="todo-item">
 			<div class="todo-text" v-on:click="markComplete">
-				<div v-bind:class="{'is-complete': item.completed, 'is-overdue': this.state.overdue}">
+				<div v-bind:class="{'is-complete': item.completed, 'is-overdue': state.overdue}">
 					{{item.title}}
 				</div>
 
-				<div class="tooltip" v-if="item.completed">
+				<div class="todo-tooltip" v-if="item.completed">
 					Mark Uncomplete
 				</div>
-				<div class="tooltip" v-else>
+				<div class="todo-tooltip" v-else>
 					Mark Complete
 				</div>
 			</div>
 			<div class="todo-deadline">
-				<Datepicker v-bind:format="dateFormat" @selected="addDeadline" v-bind:disabledDates="this.state.disabledDates" v-bind:value="item.deadline"/>
+				<Datepicker class="datepicker-offset" v-bind:format="dateFormat" @selected="addDeadline" v-bind:disabledDates="state.disabledDates" v-bind:value="item.deadline"/>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">
@@ -113,7 +113,9 @@
 	}
 </script>
 
-<style scoped>
+<style>
+	/*not scoped here so that class will apply to Datepicker. use todo in class name to prevent possible name conflicts*/
+
 	.todo-item-root {
 		display: flex;
 	}
@@ -130,8 +132,13 @@
 		.todo-item {
 			display: flex;
 		}
+		
+		.datepicker-offset .vdp-datepicker__calendar{
+			position: absolute;
+			left: -13.4rem;
+		}
 	}
-	
+
 	.todo-text {
 		display: flex;
 		flex: 1;
@@ -160,7 +167,7 @@
 		color: red;
 	}
 
-	.tooltip {
+	.todo-tooltip {
 		display: flex;
 		visibility: hidden;
 		position:relative;
@@ -172,7 +179,7 @@
 		flex-direction: column;
 	}
 
-	.todo-item:hover .tooltip {
+	.todo-item:hover .todo-tooltip {
 		visibility: visible;
 	}
 

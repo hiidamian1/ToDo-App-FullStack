@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Profile from "./views/Profile.vue";
 import UserService from "./UserService.js";
 
 Vue.use(Router);
@@ -11,6 +12,14 @@ let router = new Router({
       path: "/",
       name: "home",
       component: Home,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: "/profile",
+      name: "profile",
+      component: Profile,
       meta: {
         requiresAuth: true
       }

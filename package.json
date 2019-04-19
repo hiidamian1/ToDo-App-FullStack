@@ -21,6 +21,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "bootstrap": "^4.3.1",
     "connect-mongo": "^2.0.3",
     "cors": "^2.8.5",
     "couchbase": "^2.6.2",
@@ -28,9 +29,11 @@
     "express-query-boolean": "^2.0.0",
     "express-query-date": "^1.1.0",
     "express-session": "^1.15.6",
+    "jquery": "^3.4.0",
     "mongodb": "^3.1.13",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
+    "popper.js": "^1.15.0",
     "uuid": "^3.3.2",
     "vuejs-datepicker": "^1.5.4"
   },
