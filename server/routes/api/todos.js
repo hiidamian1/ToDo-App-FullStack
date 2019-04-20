@@ -14,6 +14,10 @@ router.get("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
 
 	let filters = {"username": req.user.username}
+	
+	//currently, below code is not used because all filtering is handled on frontend, and this route only gets 
+	//called upon initial load of the page. may need to be used later if user preferences are to be saved.
+	/*
 	const listParams = req.query;
 
 	if ("hideCompleted" in listParams && listParams.hideCompleted){
@@ -44,18 +48,14 @@ router.get("/", async (req, res) => {
 			
 			if (listParams.deadline[1]) {
 				endDate = new Date(listParams.deadline[1]);
-
 				query.$lte = endDate;
 			}
 
 			filters.deadline = query;
     }
-  }
+	}*/
 	
 	const todos = await todoCollection.find(filters).toArray();
-	/*todos.sort((todo1, todo2) => {
-		return todo1.deadline - todo2.deadline;
-	});*/
 
 	res.send(todos);
 });
@@ -66,15 +66,13 @@ router.post("/", async (req, res) => {
 	
 	const data = {
 		"username": req.user.username,
-		"title": req.body.text,
+		"title": req.body.title,
 		"completed": false,
-		"deadline": new Date(req.body.deadline)
+		"deadline": null
 	}
 
 	const response = await todoCollection.insertOne(data);
-	//console.log(response.ops);
 	res.status(201).send(response.ops[0]);
-
 });
 
 // delete todo
@@ -89,11 +87,18 @@ router.delete("/:id", async (req, res) => {
 router.put("/", async (req, res) => {
 	const todoCollection = req.app.locals.todoCollection;
 
+	let fields = {
+		"completed": req.body.completed
+	};
+
+	if (req.body.deadline) {
+		fields.deadline = new Date(req.body.deadline);
+	} else {
+		fields.deadline = null;
+	}
+
 	await todoCollection.updateOne({_id: new mongodb.ObjectID(req.body.id)}, {
-		$set: {
-			"completed": req.body.completed,
-			"deadline": new Date(req.body.deadline)
-		}
+		$set: fields
 	});
 
 	res.status(200).send();
