@@ -11,9 +11,9 @@
 				{{username}}
 			</button>
 			<div class="user-options" v-if="displayDropdown">
-				<router-link to="/profile">
+				<!--<router-link to="/profile">
 					View Profile
-				</router-link>
+				</router-link>-->
 				<a href="#" class="option" v-on:click="logout">
 					Logout
 				</a>

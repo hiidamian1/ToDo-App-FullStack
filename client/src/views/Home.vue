@@ -31,7 +31,7 @@ export default {
   methods: {
     async addTodo(newTodo) {
       try {
-        const response = await PostService.addTodo(newTodo.title, newTodo.deadline);
+        const response = await PostService.addTodo(newTodo.title);
         this.todos.push(response.data);
         this.displayedTodos.push(response.data); 
       } catch(err) {
@@ -117,25 +117,29 @@ export default {
 
       //see if todo deadline falls within date range
       if (filters.deadline) {
-        let startDate;
-        let endDate;
-        const todoDeadline = new Date(todo.deadline);
-
-        if (filters.deadline.length == 1) {
-          startDate = filters.deadline[0];
-          endDate = new Date();
-          endDate.setTime(startDate.getTime() + 24 * 3600000); 
+        if (!todo.deadline) {
+          return false;
         } else {
-          startDate = filters.deadline[0];
-          endDate = filters.deadline[1];
-        }
+          let startDate;
+          let endDate;
+          const todoDeadline = new Date(todo.deadline);
 
-        if (startDate && endDate) {
-          return todoDeadline >= startDate && todoDeadline < endDate;
-        } else if (startDate) {
-          return todoDeadline >= startDate;
-        } else {
-          return todoDeadline < endDate;
+          if (filters.deadline.length == 1) {
+            startDate = filters.deadline[0];
+            endDate = new Date();
+            endDate.setTime(startDate.getTime() + 24 * 3600000); 
+          } else {
+            startDate = filters.deadline[0];
+            endDate = filters.deadline[1];
+          }
+
+          if (startDate && endDate) {
+            return todoDeadline >= startDate && todoDeadline < endDate;
+          } else if (startDate) {
+            return todoDeadline >= startDate;
+          } else {
+            return todoDeadline < endDate;
+          }
         }
       }
       //if all tests pass, display the todo

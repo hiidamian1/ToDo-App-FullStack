@@ -18,7 +18,7 @@
 				</div>
 			</div>
 			<div class="todo-deadline">
-				<Datepicker class="datepicker-offset" v-bind:format="dateFormat" @selected="addDeadline" v-bind:disabledDates="state.disabledDates" v-bind:value="item.deadline"/>
+				<Datepicker class="datepicker-offset" v-bind:format="dateFormat" @selected="addDeadline" @cleared="removeDeadline" v-bind:disabledDates="state.disabledDates" v-bind:value="item.deadline" :clear-button="true" clear-button-icon="fas fa-times"/>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">
@@ -64,6 +64,19 @@
 
 				this.$emit("update-todo", update);
 			},
+			removeDeadline() {
+				const update = {
+					id: this.item._id,
+					deadline: null,
+					completed: this.item.completed
+				}
+
+				if (this.state.overdue) {
+					this.state.overdue = false;
+				}
+
+				this.$emit("update-todo", update);
+			},
 			markComplete() {
 				const update = {
 					id: this.item._id,
@@ -98,16 +111,18 @@
 			}
 		},
 		created() {
-			const itemDate = new Date(this.item.deadline);
-			const currentDate = new Date();
-			currentDate.setHours(0, 0, 0, 0);
+			if (this.item.deadline) {
+				const itemDate = new Date(this.item.deadline);
+				const currentDate = new Date();
+				currentDate.setHours(0, 0, 0, 0);
 
-			if (itemDate < currentDate && !this.item.completed) {
-				this.state.overdue = true;
-			}
+				if (itemDate < currentDate && !this.item.completed) {
+					this.state.overdue = true;
+				}
 
-			if (itemDate < currentDate && this.item.completed) {
-				this.state.overdueComplete = true;
+				if (itemDate < currentDate && this.item.completed) {
+					this.state.overdueComplete = true;
+				}
 			}
 		}
 	}
