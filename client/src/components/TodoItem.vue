@@ -18,7 +18,11 @@
 				</div>
 			</div>
 			<div class="todo-deadline">
-				<Datepicker class="datepicker-offset" v-bind:format="dateFormat" @selected="addDeadline" @cleared="removeDeadline" v-bind:disabledDates="state.disabledDates" v-bind:value="item.deadline" :clear-button="true" clear-button-icon="fas fa-times"/>
+				{{toDeadlineString(item.deadline)}}
+				<div v-bind:class="{'todo-open-calendar': state.dateSelected}">
+					<i class="far fa-calendar-alt" @click="openPicker"></i>
+				</div>
+				<Datepicker class="todo-item-datepicker" v-bind:class="{'todo-item-datepicker-selected': state.dateSelected}" ref="programaticOpen" v-bind:format="dateFormat" @selected="addDeadline" @cleared="removeDeadline" v-bind:disabledDates="state.disabledDates" v-bind:value="item.deadline" :clear-button="true" clear-button-icon="fas fa-times"/>
 			</div>
 		</div>
 		<button class="deleteButton" v-on:click="deleteTodo">
@@ -43,7 +47,8 @@
 						to: this._exclusiveCurrentDate()
 					},
 					overdue: false,
-					overdueComplete: false
+					overdueComplete: false,
+					dateSelected: false
 				}
 			}
 		},
@@ -62,6 +67,8 @@
 					this.state.overdue = false;
 				}
 
+				this.state.dateSelected = true;
+
 				this.$emit("update-todo", update);
 			},
 			removeDeadline() {
@@ -74,6 +81,8 @@
 				if (this.state.overdue) {
 					this.state.overdue = false;
 				}
+
+				this.state.dateSelected = false;
 
 				this.$emit("update-todo", update);
 			},
@@ -108,10 +117,20 @@
 				date.setHours(0, 0, 0, 0);
 				
 				return date;
+			},
+			toDeadlineString(deadline) {
+				if (deadline) {
+					return new Date(deadline).toDateString();
+				}
+			},
+			openPicker() {
+				this.$refs.programaticOpen.showCalendar();
 			}
 		},
 		created() {
 			if (this.item.deadline) {
+				this.state.dateSelected = true;
+
 				const itemDate = new Date(this.item.deadline);
 				const currentDate = new Date();
 				currentDate.setHours(0, 0, 0, 0);
@@ -129,13 +148,14 @@
 </script>
 
 <style>
-	/*not scoped here so that class will apply to Datepicker. use todo in class name to prevent possible name conflicts*/
+	/*not scoped here so that classes will apply to Datepicker. use todo in class name to prevent possible name conflicts*/
 
 	.todo-item-root {
 		display: flex;
 	}
 	
 	.todo-item {
+		display: flex;
 		flex: 10;
 		background: #f4f4f4;
 		padding: .7rem;
@@ -143,14 +163,40 @@
 		cursor: pointer;
 	}
 
+	.todo-item-datepicker .vdp-datepicker__calendar{
+		position: absolute;
+		top: .5rem;
+		left: -1rem;
+	}
+
+	.todo-item-datepicker-selected .vdp-datepicker__calendar{
+		top: 1rem;
+	}
+
+	.todo-open-calendar {
+		margin-left: .5rem;
+		margin-right: .5rem;
+	}
+
+	.todo-item-datepicker .vdp-datepicker__calendar{
+		left: -30rem;
+	}
+
+	.todo-item-datepicker-selected .vdp-datepicker__calendar{
+		left: -30.5rem;
+	}
+
 	@media(min-width: 768px) {
 		.todo-item {
 			display: flex;
 		}
 		
-		.datepicker-offset .vdp-datepicker__calendar{
-			position: absolute;
-			left: -13.4rem;
+		.todo-item-datepicker .vdp-datepicker__calendar{
+			left: -30rem;
+		}
+
+		.todo-item-datepicker-selected .vdp-datepicker__calendar{
+			left: -30.5rem;
 		}
 	}
 
@@ -158,6 +204,15 @@
 		display: flex;
 		flex: 1;
 		font-size: 1.6rem;
+	}
+
+	.todo-deadline {
+		display: flex;
+		align-items: center;
+	}
+
+	.todo-item-datepicker input {
+		display: none;
 	}
 
 	.deleteButton {
