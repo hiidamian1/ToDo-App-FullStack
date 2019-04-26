@@ -1,49 +1,56 @@
 <template>
   <div class="root">
-    <div id="hide-completed" class="hide-completed-container">
-      Hide Completed
-      <input type="checkbox" v-on:change="update" v-model="hideCompleted">
-    </div>
+    <div class="wrap-collabsible">
+    <input id="collapsible" class="toggle" type="checkbox">
+    <label for="collapsible" class="lbl-toggle">Filters</label>
+      <div class="collapsible-content">
+        <div class="content-inner filters">
+          
+          <div id="hide-completed" class="hide-completed-container">
+            Hide Completed
+            <input type="checkbox" v-on:change="update" v-model="hideCompleted">
+          </div>
 
-    <div id="date" class="select-container">
-      Due
-      <select v-if="!displayDatepicker" v-on:change="update" v-model="deadlineID">
-        <option value="-1"> Select </option>
-        <option value="0"> Today </option>
-        <option value="1"> Tomorrow </option>
-        <option value="2"> This Week </option>
-        <option value="3"> Next Week </option>
-        <option value="4"> Custom... </option>
-      </select>
+          <div id="date" class="select-container">
+          
+            <select class="custom-select" v-if="!displayDatepicker" v-on:change="update" v-model="deadlineID">
+              <option value="-1"> Due </option>
+              <option value="0"> Today </option>
+              <option value="1"> Tomorrow </option>
+              <option value="2"> This Week </option>
+              <option value="3"> Next Week </option>
+              <option value="4"> Custom... </option>
+            </select>
+          
+            <div class="datepicker-container" v-else>
+              <div class="datepickers">
+                <Datepicker class="datepicker" placeholder="Start" v-bind:format="dateFormat" v-model="datepickerStartDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
+                <Datepicker class="datepicker" placeholder="End" v-bind:format="dateFormat" v-model="datepickerEndDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
+              </div>
+              <a href="#" class="go" v-on:click="update">Go</a>
+              <a href="#" v-on:click="displayDatepicker = false">Back</a>
+            </div>
+          </div>
       
-      <div class="datepicker-container" v-else>
-        <div class="datepickers">
-          <Datepicker class="datepicker" placeholder="Start" v-bind:format="dateFormat" v-model="datepickerStartDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
-          <Datepicker class="datepicker" placeholder="End" v-bind:format="dateFormat" v-model="datepickerEndDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
+          <div id="sort-by" class="select-container">
+            <select v-model="sortByID" v-on:change="update">
+              <option value="-1">Sort by</option>
+              <option value=0>Alphabetical</option>
+              <option value="1">Date</option>
+            </select>
+          </div>  
+
+          <div id="order" class="select-container">
+            <select v-model="orderID" v-on:change="update">
+              <option value="-1">Order</option>
+              <option value="0">Ascending</option>
+              <option value="1">Descending</option>
+            </select>
+          </div>
+          
         </div>
-        <a href="#" class="go" v-on:click="update">Go</a>
-        <a href="#" v-on:click="displayDatepicker = false">Back</a>
       </div>
     </div>
-    
-    <div id="sort-by" class="select-container">
-      Sort by
-      <select v-model="sortByID" v-on:change="update">
-        <option value="-1">Select</option>
-        <option value=0>Alphabetical</option>
-        <option value="1">Date</option>
-      </select>
-    </div>  
-
-    <div id="order" class="select-container">
-      Order
-      <select v-model="orderID" v-on:change="update">
-        <option value="-1">Select</option>
-        <option value="0">Ascending</option>
-        <option value="1">Descending</option>
-      </select>
-    </div>
-
   </div>
 </template>
 
@@ -170,7 +177,7 @@
 </script>
 
 <style scoped>
-  .root {
+  .filters {
     display: flex;
     flex-direction: column;
 		background: #333;
@@ -180,11 +187,85 @@
     font-size: small;
 	}
 
+  .wrap-collabsible {
+    margin-bottom: 1.2rem 0;
+  }
+
+  .toggle {
+    display: none;
+  }
+
+  .lbl-toggle {
+    display: block;
+
+    text-align: center;
+
+    padding: 1rem;
+
+    color: white;
+    background: #333;
+
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+  }
+
+  .lbl-toggle:hover {
+    color: white;
+  }
+
+  .lbl-toggle::before {
+    content: ' ';
+    display: inline-block;
+
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid currentColor;
+    vertical-align: middle;
+    margin-right: .7rem;
+    transform: translateY(-2px);
+
+    transition: transform .2s ease-out;
+  }
+
+  .toggle:checked + .lbl-toggle::before {
+    transform: rotate(90deg) translateX(-3px);
+  }
+
+  .collapsible-content {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height .25s ease-in-out;
+  }
+
+  .toggle:checked + .lbl-toggle + .collapsible-content {
+    max-height: 350px;
+  }
+
+  .toggle:checked + .lbl-toggle {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .collapsible-content .content-inner {
+    background: #333;
+    color: white;
+    padding-top: 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+
   .select-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: .5rem;
+  }
+
+  .select-container select {
+    background: #333;
+    color: white;
+    border: 1px solid white;
   }
 
   .default {
@@ -216,7 +297,7 @@
   }
 
   @media(min-width:600px) {
-    .root {
+    .filters {
       flex-direction: row;
       justify-content: center;
     }
