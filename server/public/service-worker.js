@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.d4c3349ea59d098c3899d8e3ed53ac54.js"
+  "/precache-manifest.de279ab3fb9aa08d1ec5ca8277590b13.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "client"});
@@ -30,4 +30,4 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
 workbox.routing.registerNavigationRoute("/index.html");
 
-workbox.routing.registerRoute(/^\/api\/todos\//, workbox.strategies.networkFirst({ "cacheName":"api-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
+workbox.routing.registerRoute(/\/api\/todos\/*/, workbox.strategies.networkFirst({ "cacheName":"api-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
