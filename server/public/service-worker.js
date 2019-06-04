@@ -31,4 +31,4 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerNavigationRoute("/index.html");
 
 workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkFirst({ "cacheName":"api-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
-workbox.routing.registerRoute("/api/users/authenticate", workbox.strategies.networkFirst({ "cacheName":"users-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
+workbox.routing.registerRoute("/api/users/authenticate", workbox.strategies.networkFirst({ "cacheName":"users-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]}), new workbox.backgroundSync.Plugin("failedResponseQueue", {"maxRetentionTime":1440})] }), 'GET');
