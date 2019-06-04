@@ -25,7 +25,8 @@ export default {
     return {
       todos: [],
       displayedTodos: [],
-      dateFormat: "D dsu MMM yyyy"
+      dateFormat: "D dsu MMM yyyy",
+      filters: {}
     };
   },
   methods: {
@@ -34,6 +35,8 @@ export default {
         const response = await PostService.addTodo(newTodo.title);
         this.todos.push(response.data);
         this.displayedTodos.push(response.data); 
+        this.updateTodoList(this.filters);
+        //this.displayedTodos = await PostService.getTodos();
       } catch(err) {
         this.error = err.message;
       }
@@ -43,6 +46,7 @@ export default {
         await PostService.deleteTodo(todoId.id);
         this.todos = this.todos.filter(todo => todo._id != todoId.id);
         this.displayedTodos = this.displayedTodos.filter(todo => todo._id != todoId.id);
+        //this.displayedTodos = await PostService.getTodos();
       } catch(err) {
         this.error = err.message;
       }
@@ -50,7 +54,8 @@ export default {
     async updateTodo(update) {
       try {
         await PostService.updateTodo(update.id, update.completed, update.deadline);
-    
+        //this.displayedTodos = await PostService.getTodos();
+
         for (let todo of this.todos) {
           if (todo._id == update.id) {
             todo.completed = update.completed; 
@@ -63,15 +68,19 @@ export default {
           if (todo._id == update.id) {
             todo.completed = update.completed; 
             todo.deadline = update.deadline;
-            return;
+            break;
           }
         }
+
+        this.updateTodoList(this.filters);
       } catch(err) {
         this.error = err.message
       }
     },
     async updateTodoList(filters) {
       try {
+        this.filters = filters;
+
         this.displayedTodos = this.todos.slice(); //"resets" list that gets displayed before being trimmed down
         if (filters.hideCompleted || filters.deadline) {
           this.displayedTodos = this.displayedTodos.filter(todo => this._applyFilters(todo, filters));

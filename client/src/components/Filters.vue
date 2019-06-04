@@ -5,14 +5,12 @@
     <label for="collapsible" class="lbl-toggle">Filters</label>
       <div class="collapsible-content">
         <div class="content-inner filters">
-          
           <div id="hide-completed" class="hide-completed-container">
             Hide Completed
             <input type="checkbox" v-on:change="update" v-model="hideCompleted">
           </div>
 
           <div id="date" class="select-container">
-          
             <select class="custom-select" v-if="!displayDatepicker" v-on:change="update" v-model="deadlineID">
               <option value="-1"> Due </option>
               <option value="0"> Today </option>
@@ -28,7 +26,7 @@
                 <Datepicker class="datepicker" placeholder="End" v-bind:format="dateFormat" v-model="datepickerEndDate" :clear-button="true" clear-button-icon="fas fa-times"/> 
               </div>
               <a href="#" class="go" v-on:click="update">Go</a>
-              <a href="#" v-on:click="displayDatepicker = false">Back</a>
+              <a href="#" v-on:click="reset">Back</a>
             </div>
           </div>
       
@@ -47,7 +45,6 @@
               <option value="1">Descending</option>
             </select>
           </div>
-          
         </div>
       </div>
     </div>
@@ -104,16 +101,16 @@
           let dateRange = [];
         
           if (this.datepickerStartDate) {
+            this.datepickerStartDate.setHours(0, 0, 0, 0);
             dateRange.push(this.datepickerStartDate);
           } else {
             dateRange.push(false);
           }
 
           if (this.datepickerEndDate) {
-            const endDate = new Date(this.datepickerEndDate);
-            endDate.setTime(endDate.getTime() + 24 * 3600000); 
-            endDate.setHours(0, 0, 0, 0);
-            dateRange.push(endDate);
+            this.datepickerEndDate.setTime(this.datepickerEndDate.getTime() + 24 * 3600000); //set forwards one day since the comparison checks for less than 
+            this.datepickerEndDate.setHours(0, 0, 0, 0);
+            dateRange.push(this.datepickerEndDate);
           } else {
             dateRange.push(false);
           }
@@ -142,6 +139,12 @@
         }
 
 				this.$emit("update", filters);
+      },
+      reset() {
+        this.displayDatepicker = false;
+        this.datepickerStartDate = null;
+        this.datepickerEndDate = null;
+        this.update();
       },
       _idToDateArray(id) {
         if (id <= 1) {
@@ -197,14 +200,10 @@
 
   .lbl-toggle {
     display: block;
-
     text-align: center;
-
     padding: 1rem;
-
     color: white;
     background: #333;
-
     cursor: pointer;
     transition: all 0.25s ease-out;
   }
@@ -216,14 +215,12 @@
   .lbl-toggle::before {
     content: ' ';
     display: inline-block;
-
     border-top: 5px solid transparent;
     border-bottom: 5px solid transparent;
     border-left: 5px solid currentColor;
     vertical-align: middle;
     margin-right: .7rem;
     transform: translateY(-2px);
-
     transition: transform .2s ease-out;
   }
 
@@ -238,6 +235,7 @@
   }
 
   .toggle:checked + .lbl-toggle + .collapsible-content {
+    overflow: visible;
     max-height: 350px;
   }
 
@@ -247,8 +245,6 @@
   }
 
   .collapsible-content .content-inner {
-    background: #333;
-    color: white;
     padding-top: 0rem;
     padding-left: 1rem;
     padding-right: 1rem;

@@ -65,6 +65,15 @@
 					this.displayLogout = false;
 					this.displayDropdown = false;
 					localStorage.removeItem("username");
+					//clear caches
+					const usersCache = await caches.open("users-cache");
+					const usersCacheKeys = await usersCache.keys();
+					await usersCache.delete(usersCacheKeys[0]);
+
+					const apiCache = await caches.open("api-cache");
+					const apiCacheKeys = await apiCache.keys();
+					await apiCache.delete(apiCacheKeys[0]);
+
 					this.username = "";
 					this.$router.push("/login");
 				} catch(err) {

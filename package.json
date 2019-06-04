@@ -2,22 +2,12 @@
   "name": "todo-app-fullstack",
   "version": "1.0.0",
   "description": "Todo list app, Vue.js, Node.js, Express, Couchbase",
-  "main": "index.js",
+  "author": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "dev": "nodemon server/index.js",
+    "start": "node server/index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/hiidamian1/ToDo-App-FullStack.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/hiidamian1/ToDo-App-FullStack/issues"
-  },
-  "homepage": "https://github.com/hiidamian1/ToDo-App-FullStack#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -34,10 +24,22 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "popper.js": "^1.15.0",
+    "register-service-worker": "^1.6.2",
     "uuid": "^3.3.2",
     "vuejs-datepicker": "^1.5.4"
   },
   "devDependencies": {
+    "@vue/cli-plugin-pwa": "^3.8.0",
     "nodemon": "^1.18.9"
+  },
+  "bugs": {
+    "url": "https://github.com/hiidamian1/ToDo-App-FullStack/issues"
+  },
+  "homepage": "https://github.com/hiidamian1/ToDo-App-FullStack#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiidamian1/ToDo-App-FullStack.git"
   }
 }
