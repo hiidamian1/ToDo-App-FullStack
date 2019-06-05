@@ -22,6 +22,48 @@ module.exports = {
 						cacheName: "api-cache",
 						cacheableResponse: {
 							statuses: [0, 200]
+						},
+						backgroundSync: {
+							name: 'failedRequestQueue',
+							options: {
+								maxRetentionTime: 24 * 60,
+							},
+						}
+					}
+				},
+				{
+					urlPattern: "/api/todos/",
+					handler: "networkOnly",
+					options: {
+						backgroundSync: {
+							name: 'failedAddQueue',
+							options: {
+								maxRetentionTime: 24 * 60,
+							},
+						}
+					}
+				},
+				{
+					urlPattern: new RegExp("/api/todos/.+"),
+					handler: "networkOnly",
+					options: {
+						backgroundSync: {
+							name: 'failedDeleteQueue',
+							options: {
+								maxRetentionTime: 24 * 60,
+							},
+						}
+					}
+				},
+				{
+					urlPattern: "/api/todos/",
+					handler: "networkOnly",
+					options: {
+						backgroundSync: {
+							name: 'failedUpdateQueue',
+							options: {
+								maxRetentionTime: 24 * 60,
+							},
 						}
 					}
 				},
