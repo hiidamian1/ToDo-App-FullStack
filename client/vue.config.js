@@ -8,7 +8,7 @@ module.exports = {
 				target: "http://localhost:5000"
 			}
 		}
-	},
+	}/*,
 	pwa: {
 		workboxPluginMode: "GenerateSW",
 		workboxOptions: {
@@ -80,5 +80,5 @@ module.exports = {
 				}
 			]
 		}
-	}
+	}*/
 }

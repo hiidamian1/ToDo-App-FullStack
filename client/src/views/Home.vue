@@ -1,5 +1,8 @@
 <template>
   <div class="root">
+    <!--<div v-if="error" class="error">
+      {{error}}
+    </div>-->
     <Filters v-bind:dateFormat="dateFormat" v-on:update="updateTodoList"/>
     <div id="home">
       <TodoInput v-on:add-todo="addTodo"/>
@@ -26,17 +29,20 @@ export default {
       todos: [],
       displayedTodos: [],
       dateFormat: "D dsu MMM yyyy",
-      filters: {}
+      filters: {},
+      error: ""
     };
   },
   methods: {
     async addTodo(newTodo) {
       try {
         const response = await PostService.addTodo(newTodo.title);
+        
+        PostService.getTodos();
+
         this.todos.push(response.data);
-        this.displayedTodos.push(response.data); 
+        this.displayedTodos.push(response.data);
         this.updateTodoList(this.filters);
-        //this.displayedTodos = await PostService.getTodos();
       } catch(err) {
         this.error = err.message;
       }
@@ -44,9 +50,11 @@ export default {
     async deleteTodo(todoId) {
       try {
         await PostService.deleteTodo(todoId.id);
+        
+        PostService.getTodos();
+        
         this.todos = this.todos.filter(todo => todo._id != todoId.id);
         this.displayedTodos = this.displayedTodos.filter(todo => todo._id != todoId.id);
-        //this.displayedTodos = await PostService.getTodos();
       } catch(err) {
         this.error = err.message;
       }
@@ -54,7 +62,8 @@ export default {
     async updateTodo(update) {
       try {
         await PostService.updateTodo(update.id, update.completed, update.deadline);
-        //this.displayedTodos = await PostService.getTodos();
+        
+        PostService.getTodos();
 
         for (let todo of this.todos) {
           if (todo._id == update.id) {
@@ -169,6 +178,12 @@ export default {
 <style scoped>
   .root {
     width: 100%;
+  }
+
+  .error {
+    width: 100%;
+    background-color: red;
+    color: white;
   }
 </style>
 
