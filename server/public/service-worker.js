@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.36610f89713801d227b063aaecc4c668.js"
+  "/precache-manifest.996b936369b8b9d8878a7ad79642be03.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "client"});
@@ -31,7 +31,7 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerNavigationRoute("/index.html");
 
 workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkFirst({ "cacheName":"api-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]}), new workbox.backgroundSync.Plugin("failedRequestQueue", {"maxRetentionTime":1440})] }), 'GET');
-workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedAddQueue", {"maxRetentionTime":1440})] }), 'POST');
-workbox.routing.registerRoute(/\/api\/todos\/.+/, workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedDeleteQueue", {"maxRetentionTime":1440})] }), 'DELETE');
-workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedUpdateQueue", {"maxRetentionTime":1440})] }), 'PUT');
+workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedAddQueue", {"maxRetentionTime":1440})] }), 'GET');
+workbox.routing.registerRoute(/\/api\/todos\/.+/, workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedDeleteQueue", {"maxRetentionTime":1440})] }), 'GET');
+workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedUpdateQueue", {"maxRetentionTime":1440})] }), 'GET');
 workbox.routing.registerRoute("/api/users/authenticate", workbox.strategies.networkFirst({ "cacheName":"users-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
