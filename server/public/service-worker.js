@@ -31,7 +31,7 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 workbox.routing.registerNavigationRoute("/index.html");
 
 workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkFirst({ "cacheName":"api-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]}), new workbox.backgroundSync.Plugin("failedRequestQueue", {"maxRetentionTime":1440})] }), 'GET');
-workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedAddQueue", {"maxRetentionTime":1440})] }), 'GET');
-workbox.routing.registerRoute(/\/api\/todos\/.+/, workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedDeleteQueue", {"maxRetentionTime":1440})] }), 'GET');
-workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedUpdateQueue", {"maxRetentionTime":1440})] }), 'GET');
+workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedAddQueue", {"maxRetentionTime":1440})] }), 'POST');
+workbox.routing.registerRoute(/\/api\/todos\/.+/, workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedDeleteQueue", {"maxRetentionTime":1440})] }), 'DELETE');
+workbox.routing.registerRoute("/api/todos/", workbox.strategies.networkOnly({ plugins: [new workbox.backgroundSync.Plugin("failedUpdateQueue", {"maxRetentionTime":1440})] }), 'PUT');
 workbox.routing.registerRoute("/api/users/authenticate", workbox.strategies.networkFirst({ "cacheName":"users-cache","networkTimeoutSeconds":20, plugins: [new workbox.cacheableResponse.Plugin({"statuses":[0,200]})] }), 'GET');
